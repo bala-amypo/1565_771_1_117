@@ -13,6 +13,22 @@ public class ViolationRecordServiceImpl implements ViolationRecordService{
         return violation;
     }
     public List<ViolationRecord> getViolationsByUser(Long userId){
-        List<ViolationRecord> result =
+        List<ViolationRecord> result =new ArrayList<>();
+        for (ViolationRecord v : violations){
+            if(v.getUserId().equals(userId)){
+                result.add(v);
+            }
+        }
+        return result;
     }
+    public ViolationRecord markResolved(Long id){
+        for (ViolationRecord v : violations){
+            if(v.getId().equals(id)){
+                v.setResolved(true);
+                return v;
+            }
+        }
+        return null;
+    }
+    
 }
