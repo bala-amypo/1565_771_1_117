@@ -22,7 +22,15 @@ public class LoginEventServiceImpl implements LoginEventService{
         return result;
     }
     public List<LoginEvent> getSuspiciousLogins(Long userId){
-        <LoginEvent> result = new ArrayList<>();
-        fro()
+        List<LoginEvent> result = new ArrayList<>();
+        for(LoginEvent e : events){
+            if(e.getUserId().equals(userId) && "Falied".euqla(e.getLoginStatus())){
+                result.add(e);
+            }
+        }
+        return result;
+    }
+    public List<LoginEvent> getAllEvents(){
+        return events;
     }
 }

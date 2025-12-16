@@ -1,0 +1,8 @@
+
+
+
+
+
+
+@Service
+public class DeviceProfileServiceImpl
