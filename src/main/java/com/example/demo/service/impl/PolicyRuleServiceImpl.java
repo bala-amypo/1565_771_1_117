@@ -35,6 +35,13 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     public List<PolicyRule> getAllRules(){
         return rules;
     }
-    public PolicyRule getRuleBycode()
+    public PolicyRule getRuleBycode(String rulecode){
+        for(PolicyRule r: rules){
+            if(r.getRuleCode().equals(ruleCode)){
+                return r;
+            }
+        }
+        return null;
+    }
 
 }
