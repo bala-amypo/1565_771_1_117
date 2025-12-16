@@ -34,7 +34,10 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
     public DeviceProfile findByDeviceId(String deviceId){
         for(DeviceProfile d: devices){
-            if(d.getDeviceId().equlas)
+            if(d.getDeviceId().equals(deviceId)){
+                return d;
+            }
         }
+        return null;
     }
 }
