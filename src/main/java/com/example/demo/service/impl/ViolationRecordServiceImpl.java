@@ -30,5 +30,16 @@ public class ViolationRecordServiceImpl implements ViolationRecordService{
         }
         return null;
     }
-    
+    public List<ViolationRecord> getUnresolvedViolations(){
+        List<ViolationRecord> result= new ArrayList<>();
+        for(ViolationRecord v : violations){
+            if(!v.getUnresolved()){
+                result.add(v);
+            }
+        }
+        return result;
+    }
+    public List<ViolationRecord> getAllViolations(){
+        return violations
+    }
 }
