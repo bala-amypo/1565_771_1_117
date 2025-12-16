@@ -36,6 +36,14 @@ public class UserAccountServiceImpl implements UserAccountService{
         return null;
     }
     public UserAccount updateUser(Long id,UserAccount user){
-        for()
+        for(UserAccount u: users){
+            if(u.getId().equals(id)){
+                u.setUsername(user.getUsername());
+                u.setEmail(user.getEmail());
+                u.setStatus(user.getStatus());
+                return u;
+            }
+        }
+        return null;
     }
 }
