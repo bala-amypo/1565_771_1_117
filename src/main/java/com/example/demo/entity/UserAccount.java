@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 @Entity
 public class UserAccount {
     @Id
-    private int id;
+    private long id;
     private String employeeId;
     private String username;
     private String email;
