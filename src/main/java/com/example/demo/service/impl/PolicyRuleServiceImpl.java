@@ -16,9 +16,25 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
                 r.setRuleCode(rule.getRuleCode());
                 r.setDescripton(rule.getDescription());
                 r.setSeverity(rule.getSeverity());
-                r.setConditionsJson(rule.getConditions)
+                r.setConditionsJson(rule.getConditionsJson());
+                r.setActive(rule.getActive());
+                return r;
             }
         }
+        return null;
+    }\
+    public List<PolicyRule> getActiveRules(){
+        List<PolicyRule> activeRules = new ArrayList<>();
+        for(PolicyRule r :rules){
+            if(Boolean.True.equals(r.getActive())){
+                activeRules.add(r);
+            }
+        }
+        return activeRules;
     }
+    public List<PolicyRule> getAllRules(){
+        return rules;
+    }
+    public PolicyRule getRuleBycode()
 
 }
