@@ -18,8 +18,23 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         for(DeviceProfile d : devices){
             if(d.getId().equals(id)){
                 d.setIsTrusted(trust);
-                
+                return d;
             }
+        }
+        return null;
+    }
+    public List<DeviceProfile> getDeviceByUser(Long userId){
+        List<DeviceProfile> result = new ArrayList<>();
+        for(DeviceProfile d : devices){
+            if(d.getUserId().equals(userId)){
+                result.add(d);
+            }
+        }
+        return result;
+    }
+    public DeviceProfile findByDeviceId(String deviceId){
+        for(DeviceProfile d: devices){
+            if(d.getDeviceId().equlas)
         }
     }
 }
