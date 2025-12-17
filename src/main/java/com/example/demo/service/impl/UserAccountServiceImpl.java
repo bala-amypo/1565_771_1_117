@@ -1,46 +1,56 @@
+package com.example.demo1.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
 
-
-
-
-
+import com.example.demo1.entity.UserAccount;
+import com.example.demo1.service.UserAccountService;
 
 @Service
-public class UserAccountServiceImpl implements UserAccountService{
+public class UserAccountServiceImpl implements UserAccountService {
+
     List<UserAccount> users = new ArrayList<>();
-    long id=1;
-    public List<UserAccount> getAllUsers()
-    {
-        return users;
-    }
-    public UserAccount createUser(UserAccount user){
-        user.setId((long) id++);
+    long id = 1;
+
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        user.setId(id++);
         users.add(user);
         return user;
     }
-    public UserAccount getUserById(Long id){
-        for(UserAccount u: users){
-            if(u.getId().equals(id)){
+
+    @Override
+    public UserAccount getUserById(Long id) {
+        for (UserAccount u : users) {
+            if (u.getId()==id) {
                 return u;
             }
         }
         return null;
     }
-    public UserAccount findByUsername(String username){
-        for(UserAccount u: users){
-            if(u.getUsername().equals(username)){
+
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return users;
+    }
+
+    @Override
+    public UserAccount findByUsername(String username) {
+        for (UserAccount u : users) {
+            if (u.getUsername().equals(username)) {
                 return u;
             }
         }
         return null;
     }
-    public UserAccount updateUser(Long id,UserAccount user){
-        for(UserAccount u: users){
-            if(u.getId().equals(id)){
-                u.setUsername(user.getUsername());
-                u.setEmail(user.getEmail());
-                u.setStatus(user.getStatus());
+
+    @Override
+    public UserAccount updateUserStatus(Long id, String status) {
+        for (UserAccount u : users) {
+            if (u.getId()==id) {
+                u.setStatus(status);
                 return u;
             }
         }

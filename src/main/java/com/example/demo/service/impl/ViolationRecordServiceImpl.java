@@ -1,45 +1,61 @@
+package com.example.demo1.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
 
-
+import com.example.demo1.entity.ViolationRecord;
+import com.example.demo1.service.ViolationRecordService;
 
 @Service
-public class ViolationRecordServiceImpl implements ViolationRecordService{
+public class ViolationRecordServiceImpl implements ViolationRecordService {
+
     List<ViolationRecord> violations = new ArrayList<>();
-    long id=1;
-    public ViolationRecord logViolation(ViolationRecord violation){
-        violation.setId((long) id++);
-        violations.add(violation);;
+    long id = 1;
+
+    @Override
+    public ViolationRecord logViolation(ViolationRecord violation) {
+        violation.setId(id++);
+        violations.add(violation);
         return violation;
     }
-    public List<ViolationRecord> getViolationsByUser(Long userId){
-        List<ViolationRecord> result =new ArrayList<>();
-        for (ViolationRecord v : violations){
-            if(v.getUserId().equals(userId)){
+
+    @Override
+    public List<ViolationRecord> getViolationsByUser(Long userId) {
+        List<ViolationRecord> result = new ArrayList<>();
+        for (ViolationRecord v : violations) {
+            if (v.getUserId()==userId) {
                 result.add(v);
             }
         }
         return result;
     }
-    public ViolationRecord markResolved(Long id){
-        for (ViolationRecord v : violations){
-            if(v.getId().equals(id)){
+
+    @Override
+    public ViolationRecord markResolved(Long id) {
+        for (ViolationRecord v : violations) {
+            if (v.getId()==id) {
                 v.setResolved(true);
                 return v;
             }
         }
         return null;
     }
-    public List<ViolationRecord> getUnresolvedViolations(){
-        List<ViolationRecord> result= new ArrayList<>();
-        for(ViolationRecord v : violations){
-            if(!v.getUnresolved()){
+
+    @Override
+    public List<ViolationRecord> getUnResolvedViolations() {
+        List<ViolationRecord> result = new ArrayList<>();
+        for (ViolationRecord v : violations) {
+            if (!v.getResolved()) {
                 result.add(v);
             }
         }
         return result;
     }
-    public List<ViolationRecord> getAllViolations(){
-        return violations
+
+    @Override
+    public List<ViolationRecord> getAllViolations() {
+        return violations;
     }
 }

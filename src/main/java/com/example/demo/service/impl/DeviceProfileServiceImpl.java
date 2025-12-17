@@ -1,8 +1,12 @@
+package com.example.demo1.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
 
-
-
+import com.example.demo1.entity.DeviceProfile;
+import com.example.demo1.service.DeviceProfileService;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
@@ -16,7 +20,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
     public DeviceProfile updateTrustStatus(Long id, boolean trust){
         for(DeviceProfile d : devices){
-            if(d.getId().equals(id)){
+            if(d.getId()==id){
                 d.setIsTrusted(trust);
                 return d;
             }
@@ -26,7 +30,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     public List<DeviceProfile> getDeviceByUser(Long userId){
         List<DeviceProfile> result = new ArrayList<>();
         for(DeviceProfile d : devices){
-            if(d.getUserId().equals(userId)){
+            if(d.getUserId()==userId){
                 result.add(d);
             }
         }
