@@ -20,7 +20,7 @@ public class ViolationRecord {
     public ViolationRecord() {
     }
     public ViolationRecord(long userId, long policyRuleId, long eventId, String violationType, String details,
-            String severity, LocalDateTime detectedAt, Boolean resolved) {
+        String severity, LocalDateTime detectedAt, Boolean resolved) {
         this.userId = userId;
         PolicyRuleId = policyRuleId;
         this.eventId = eventId;
