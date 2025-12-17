@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo1.entity.DeviceProfile;
-import com.example.demo1.service.DeviceProfileService;
+import com.example.demo.entity.DeviceProfile;
+import com.example.demo.service.DeviceProfileService;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
@@ -14,7 +14,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     long id;
 
     public DeviceProfile registerDevice(DeviceProfile device){
-        device.setId((long)id++);
+        device.setId(id++);
         devices.add(device);
         return device;
     }

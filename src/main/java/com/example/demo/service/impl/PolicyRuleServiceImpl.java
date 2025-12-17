@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo1.entity.PolicyRule;
-import com.example.demo1.service.PolicyRuleService;
+import com.example.demo.entity.PolicyRule;
+import com.example.demo.service.PolicyRuleService;
 
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {

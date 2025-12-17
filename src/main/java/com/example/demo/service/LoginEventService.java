@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo1.entity.LoginEvent;
+import com.example.demo.entity.LoginEvent;
 
 
 
