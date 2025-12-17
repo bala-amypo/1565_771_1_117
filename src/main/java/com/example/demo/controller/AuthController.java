@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo1.entity.UserAccount;
-import com.example.demo1.service.UserAccountService;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.service.UserAccountService;
 
 
 

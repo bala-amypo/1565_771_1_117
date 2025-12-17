@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo1.entity.PolicyRule;
-import com.example.demo1.service.PolicyRuleService;
+import com.example.demo.entity.PolicyRule;
+import com.example.demo.service.PolicyRuleService;
 
 @RestController
 @RequestMapping("/rules")

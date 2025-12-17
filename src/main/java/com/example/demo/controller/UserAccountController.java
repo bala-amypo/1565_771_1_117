@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo1.entity.UserAccount;
-import com.example.demo1.service.UserAccountService;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.service.UserAccountService;
 
 @RestController
 @RequestMapping("/users")

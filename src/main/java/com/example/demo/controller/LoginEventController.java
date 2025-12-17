@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo1.entity.LoginEvent;
-import com.example.demo1.service.LoginEventService;
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.service.LoginEventService;
 
 @RestController
 @RequestMapping("/logins")
