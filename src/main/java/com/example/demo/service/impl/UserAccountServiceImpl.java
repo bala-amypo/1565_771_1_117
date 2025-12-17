@@ -12,11 +12,12 @@ import com.example.demo.service.UserAccountService;
 public class UserAccountServiceImpl implements UserAccountService {
 
     List<UserAccount> users = new ArrayList<>();
-    long id = 1;
+    private Long id = 1L;
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        user.setId(id++);
+        user.setId(id);
+        id++;
         users.add(user);
         return user;
     }
@@ -24,7 +25,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount getUserById(Long id) {
         for (UserAccount u : users) {
-            if (u.getId()==id) {
+            if (u.getId().equals(id)) {
                 return u;
             }
         }
@@ -49,7 +50,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
         for (UserAccount u : users) {
-            if (u.getId()==id) {
+            if (u.getId().equals(id)) {
                 u.setStatus(status);
                 return u;
             }
