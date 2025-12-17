@@ -16,7 +16,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        user.setId((long) id++);
+        user.setId(id.intValue()); 
+        id++;
     
         users.add(user);
         return user;
@@ -25,7 +26,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount getUserById(Long id) {
         for (UserAccount u : users) {
-            if (u.getId()==(id)) {
+            if (Long.valueOf(u.getId()).equals(id)) {
                 return u;
             }
         }
@@ -50,7 +51,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
         for (UserAccount u : users) {
-            if (u.getId()==(id)) {
+            if (Long.valueOf(u.getId()).equals(id)) {
                 u.setStatus(status);
                 return u;
             }
