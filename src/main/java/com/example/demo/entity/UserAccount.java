@@ -28,7 +28,7 @@ public class UserAccount {
         this.status = status;
         this.createdAt = createdAt;
     }
-    public int getId() {
+    public long getId() {
         return id;
     }
     public void setId(int id) {
