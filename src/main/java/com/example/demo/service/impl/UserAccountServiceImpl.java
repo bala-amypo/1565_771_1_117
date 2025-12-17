@@ -12,7 +12,7 @@ import com.example.demo.service.UserAccountService;
 public class UserAccountServiceImpl implements UserAccountService {
 
     List<UserAccount> users = new ArrayList<>();
-    Long id = 1;
+    long id = 1;
 
     @Override
     public UserAccount createUser(UserAccount user) {
