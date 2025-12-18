@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/api/violations")
 public class ViolationRecordController {
 
-    private final ViolationRecordService violationService;
+    ViolationRecordService violationService;   
 
     public ViolationRecordController(ViolationRecordService violationService) {
         this.violationService = violationService;

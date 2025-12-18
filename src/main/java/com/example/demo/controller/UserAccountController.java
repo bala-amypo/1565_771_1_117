@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserAccountController {
 
-    private final UserAccountService userService;
+    UserAccountService userService;  
 
     public UserAccountController(UserAccountService userService) {
         this.userService = userService;
