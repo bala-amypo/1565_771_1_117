@@ -49,7 +49,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     @Override
     public DeviceProfile findByDeviceId(String deviceId) {
         for (DeviceProfile d : devices) {
-            if (d.getDeviceId()==(deviceId)) {
+            if (d.getDeviceId().equals(deviceId)) {
                 return d;
             }
         }
