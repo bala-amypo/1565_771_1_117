@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserAccountService userService;
+    UserAccountService userService;   
 
     public AuthController(UserAccountService userService) {
         this.userService = userService;

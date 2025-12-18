@@ -11,7 +11,7 @@ import java.util.Optional;
 @RequestMapping("/api/devices")
 public class DeviceProfileController {
 
-    private final DeviceProfileService deviceService;
+    DeviceProfileService deviceService;   
 
     public DeviceProfileController(DeviceProfileService deviceService) {
         this.deviceService = deviceService;

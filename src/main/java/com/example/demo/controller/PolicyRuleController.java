@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    private final PolicyRuleService ruleService;
+    PolicyRuleService ruleService;   // no private, no final
 
     public PolicyRuleController(PolicyRuleService ruleService) {
         this.ruleService = ruleService;
