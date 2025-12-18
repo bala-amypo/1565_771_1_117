@@ -25,7 +25,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     public List<ViolationRecord> getViolationsByUser(Long userId) {
         List<ViolationRecord> result = new ArrayList<>();
         for (ViolationRecord v : violations) {
-            if (v.getUserId()==userId) {
+            if (v.getUserId().equals(userId)) {
                 result.add(v);
             }
         }
@@ -35,7 +35,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     @Override
     public ViolationRecord markResolved(Long id) {
         for (ViolationRecord v : violations) {
-            if (v.getId()==id) {
+            if (v.getId().equals(id)) {
                 v.setResolved(true);
                 return v;
             }
@@ -44,7 +44,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public List<ViolationRecord> getUnResolvedViolations() {
+    public List<ViolationRecord> getUnresolvedViolations() {
         List<ViolationRecord> result = new ArrayList<>();
         for (ViolationRecord v : violations) {
             if (!v.getResolved()) {
