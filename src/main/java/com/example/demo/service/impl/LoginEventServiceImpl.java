@@ -4,17 +4,15 @@ import com.example.demo.entity.LoginEvent;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
-import com.example.demo.util.RuleEvaluationUtil;
 import java.util.List;
 
 public class LoginEventServiceImpl implements LoginEventService {
 
     private final LoginEventRepository loginRepo;
-    private final RuleEvaluationUtil ruleEvaluator;
 
-    public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleEvaluator) {
+    public LoginEventServiceImpl(LoginEventRepository loginRepo) {
         this.loginRepo = loginRepo;
-        this.ruleEvaluator = ruleEvaluator;
+    
     }
 
     public LoginEvent recordLogin(LoginEvent event) {
