@@ -1,24 +1,12 @@
-
 package com.example.demo.service;
 
+import com.example.demo.entity.PolicyRule;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.PolicyRule;
-
-
-
-
-
-
-
-
-
-public interface PolicyRuleService{
+public interface PolicyRuleService {
     PolicyRule createRule(PolicyRule rule);
-    PolicyRule updateRule(Long id,PolicyRule rule);
+    PolicyRule updateRule(Long id, PolicyRule rule);
     List<PolicyRule> getActiveRules();
-    List<PolicyRule> getAllRules();
     PolicyRule getRuleByCode(String ruleCode);
+    List<PolicyRule> getAllRules();
 }

@@ -1,59 +1,46 @@
 package com.example.demo.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import java.time.LocalDateTime;
+import java.util.*;
 
-@Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    List<UserAccount> users = new ArrayList<>();
-    long id = 1;
+    private final UserAccountRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    @Override
+    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public UserAccount createUser(UserAccount user) {
-        user.setId(id++);
-        users.add(user);
-        return user;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getStatus() == null) user.setStatus("ACTIVE");
+        user.setCreatedAt(LocalDateTime.now());
+        return userRepo.save(user);
     }
 
-    @Override
     public UserAccount getUserById(Long id) {
-        for (UserAccount u : users) {
-            if (u.getId() == id) {
-                return u;
-            }
-        }
-        return null;
+        return userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    @Override
-    public List<UserAccount> getAllUsers() {
-        return users;
-    }
-
-    @Override
-    public UserAccount findByUsername(String username) {
-        for (UserAccount u : users) {
-            if (u.getUsername().equals(username)) {
-                return u;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public UserAccount updateUserStatus(Long id, String status) {
-        for (UserAccount u : users) {
-            if (u.getId() == id) {
-                u.setStatus(status);
-                return u;
-            }
-        }
-        return null;
+        UserAccount user = getUserById(id);
+        user.setStatus(status);
+        return userRepo.save(user);
+    }
+
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 }

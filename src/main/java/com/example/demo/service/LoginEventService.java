@@ -1,20 +1,11 @@
-
 package com.example.demo.service;
 
+import com.example.demo.entity.LoginEvent;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.LoginEvent;
-
-
-
-
-
-
-public interface LoginEventService{
+public interface LoginEventService {
     LoginEvent recordLogin(LoginEvent event);
+    List<LoginEvent> getEventsByUser(Long userId);
     List<LoginEvent> getSuspiciousLogins(Long userId);
     List<LoginEvent> getAllEvents();
-    List<LoginEvent> getEventsByUser(Long userId);
 }

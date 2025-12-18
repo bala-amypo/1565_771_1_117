@@ -1,66 +1,43 @@
 package com.example.demo.service.impl;
 
-import java.util.ArrayList;
+import com.example.demo.entity.PolicyRule;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.PolicyRuleRepository;
+import com.example.demo.service.PolicyRuleService;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.PolicyRule;
-import com.example.demo.service.PolicyRuleService;
-
-@Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    List<PolicyRule> rules = new ArrayList<>();
-    long id = 1;
+    private final PolicyRuleRepository ruleRepo;
 
-    @Override
+    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
+        this.ruleRepo = ruleRepo;
+    }
+
     public PolicyRule createRule(PolicyRule rule) {
-        rule.setId(id++);
-        rules.add(rule);
-        return rule;
+        return ruleRepo.save(rule);
     }
 
-    @Override
     public PolicyRule updateRule(Long id, PolicyRule rule) {
-        for (PolicyRule r : rules) {
-            if (r.getId()==id)
-                
-                {
-                r.setRuleCode(rule.getRuleCode());
-                r.setDescription(rule.getDescription());
-                r.setSeverity(rule.getSeverity());
-                r.setConditionsJson(rule.getConditionsJson());
-                r.setActive(rule.getActive());
-                return r;
-            }
-        }
-        return null;
+        PolicyRule existing = ruleRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setConditionsJson(rule.getConditionsJson());
+        existing.setActive(rule.getActive());
+        return ruleRepo.save(existing);
     }
 
-    @Override
     public List<PolicyRule> getActiveRules() {
-        List<PolicyRule> activeRules = new ArrayList<>();
-        for (PolicyRule r : rules) {
-            if (Boolean.TRUE.equals(r.getActive())) {
-                activeRules.add(r);
-            }
-        }
-        return activeRules;
+        return ruleRepo.findByActiveTrue();
     }
 
-    @Override
-    public List<PolicyRule> getAllRules() {
-        return rules;
-    }
-
-    @Override
     public PolicyRule getRuleByCode(String ruleCode) {
-        for (PolicyRule r : rules) {
-            if (r.getRuleCode().equals(ruleCode)) {
-                return r;
-            }
-        }
-        return null;
+        return ruleRepo.findByRuleCode(ruleCode)
+                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
+    }
+
+    public List<PolicyRule> getAllRules() {
+        return ruleRepo.findAll();
     }
 }
