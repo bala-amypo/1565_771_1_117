@@ -1,12 +1,12 @@
-package com.example.demo1.service.impl;
+package com.example.demo.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo1.entity.UserAccount;
-import com.example.demo1.service.UserAccountService;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.service.UserAccountService;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {

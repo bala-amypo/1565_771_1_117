@@ -1,12 +1,12 @@
-package com.example.demo1.service.impl;
+package com.example.demo.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo1.entity.ViolationRecord;
-import com.example.demo1.service.ViolationRecordService;
+import com.example.demo.entity.ViolationRecord;
+import com.example.demo.service.ViolationRecordService;
 
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
