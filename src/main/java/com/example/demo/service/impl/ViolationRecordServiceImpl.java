@@ -5,7 +5,8 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import java.util.List;
-
+import org.springframework.stereotype.Service;
+@Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
     private final ViolationRecordRepository violationRepo;

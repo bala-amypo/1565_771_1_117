@@ -7,7 +7,8 @@ import com.example.demo.service.UserAccountService;
 // import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 import java.util.*;
-
+import org.springframework.stereotype.Service;
+@Service
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userRepo;

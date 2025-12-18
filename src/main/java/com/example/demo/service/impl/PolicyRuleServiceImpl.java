@@ -5,7 +5,8 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.service.PolicyRuleService;
 import java.util.List;
-
+import org.springframework.stereotype.Service;
+@Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
     private final PolicyRuleRepository ruleRepo;
