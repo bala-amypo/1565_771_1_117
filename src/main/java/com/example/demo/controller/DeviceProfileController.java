@@ -31,10 +31,11 @@ public class DeviceProfileController {
         return deviceService.updateTrustStatus(id, trust);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getDevicesByUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId);
-    }
+  @GetMapping("/user/{userId}")
+public ResponseEntity<List<DeviceProfile>> byUser(@PathVariable Long userId) {
+    return ResponseEntity.ok(deviceProfileService.getDeviceByUser(userId));
+}
+
 
    
     @GetMapping("/lookup/{deviceId}")
