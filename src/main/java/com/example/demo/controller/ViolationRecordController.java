@@ -1,48 +1,43 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/violations")
+@RequestMapping("/api/violations")
 public class ViolationRecordController {
 
-    @Autowired
-    ViolationRecordService violationRecordService;
+    private final ViolationRecordService violationService;
+
+    public ViolationRecordController(ViolationRecordService violationService) {
+        this.violationService = violationService;
+    }
 
     @PostMapping
-    public ResponseEntity<ViolationRecord> logViolation(@RequestBody ViolationRecord violation) {
-        return ResponseEntity.status(201)
-                .body(violationRecordService.logViolation(violation));
+    public ViolationRecord log(@RequestBody ViolationRecord violation) {
+        return violationService.logViolation(violation);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ViolationRecord>> getViolationsByUser(@PathVariable Long userId) {
-        return ResponseEntity.status(200)
-                .body(violationRecordService.getViolationsByUser(userId));
+    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
+        return violationService.getViolationsByUser(userId);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ViolationRecord> markResolved(@PathVariable Long id) {
-        return ResponseEntity.status(200)
-                .body(violationRecordService.markResolved(id));
+    @PutMapping("/{id}/resolve")
+    public ViolationRecord resolve(@PathVariable Long id) {
+        return violationService.markResolved(id);
     }
 
     @GetMapping("/unresolved")
-    public ResponseEntity<List<ViolationRecord>> getUnResolvedViolations() {
-        return ResponseEntity.status(200)
-                .body(violationRecordService.getUnResolvedViolations());
+    public List<ViolationRecord> getUnresolved() {
+        return violationService.getUnresolvedViolations();
     }
 
     @GetMapping
-    public ResponseEntity<List<ViolationRecord>> getAllViolations() {
-        return ResponseEntity.status(200)
-                .body(violationRecordService.getAllViolations());
+    public List<ViolationRecord> getAll() {
+        return violationService.getAllViolations();
     }
 }

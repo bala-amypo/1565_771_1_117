@@ -1,49 +1,39 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.service.PolicyRuleService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    @Autowired
-    PolicyRuleService policyRuleService;
+    private final PolicyRuleService ruleService;
+
+    public PolicyRuleController(PolicyRuleService ruleService) {
+        this.ruleService = ruleService;
+    }
 
     @PostMapping
-    public ResponseEntity<PolicyRule> createRule(@RequestBody PolicyRule rule) {
-        return ResponseEntity.status(201)
-                .body(policyRuleService.createRule(rule));
+    public PolicyRule create(@RequestBody PolicyRule rule) {
+        return ruleService.createRule(rule);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PolicyRule> updateRule(@PathVariable Long id,
-                                                 @RequestBody PolicyRule rule) {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.updateRule(id, rule));
+    public PolicyRule update(@PathVariable Long id,
+                             @RequestBody PolicyRule rule) {
+        return ruleService.updateRule(id, rule);
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<PolicyRule>> getActiveRules() {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.getActiveRules());
+    public List<PolicyRule> getActive() {
+        return ruleService.getActiveRules();
     }
 
     @GetMapping
-    public ResponseEntity<List<PolicyRule>> getAllRules() {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.getAllRules());
-    }
-
-    @GetMapping("/{ruleCode}")
-    public ResponseEntity<PolicyRule> getRuleByCode(@PathVariable String ruleCode) {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.getRuleByCode(ruleCode));
+    public List<PolicyRule> getAll() {
+        return ruleService.getAllRules();
     }
 }

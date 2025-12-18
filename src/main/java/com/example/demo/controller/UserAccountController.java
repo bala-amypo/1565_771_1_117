@@ -1,48 +1,39 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserAccountController {
 
-    @Autowired
-    UserAccountService userAccountService;
+    private final UserAccountService userService;
 
-    @GetMapping
-    public ResponseEntity<List<UserAccount>> getAllUsers() {
-        List<UserAccount> users = userAccountService.getAllUsers();
-        return ResponseEntity.status(200).body(users);
+    public UserAccountController(UserAccountService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
-        return ResponseEntity.status(201)
-                .body(userAccountService.createUser(user));
+    public UserAccount createUser(@RequestBody UserAccount user) {
+        return userService.createUser(user);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserAccount> getUserById(@PathVariable Long id) {
-        return ResponseEntity.status(200)
-                .body(userAccountService.getUserById(id));
+    public UserAccount getUser(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserAccount> getUserByUsername(@PathVariable String username) {
-        return ResponseEntity.status(200)
-                .body(userAccountService.findByUsername(username));
+    @PutMapping("/{id}/status")
+    public UserAccount updateStatus(@PathVariable Long id,
+                                    @RequestParam String status) {
+        return userService.updateUserStatus(id, status);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserAccount> updateUser(@PathVariable Long id, @RequestBody String user) {
-
-        return ResponseEntity.status(200).body(userAccountService.updateUserStatus(id, user));
+    @GetMapping
+    public List<UserAccount> getAllUsers() {
+        return userService.getAllUsers();
     }
 }
