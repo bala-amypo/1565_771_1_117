@@ -18,7 +18,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     public UserAccount createUser(UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getStatus() == null) user.setStatus("ACTIVE");
         user.setCreatedAt(LocalDateTime.now());
         return userRepo.save(user);

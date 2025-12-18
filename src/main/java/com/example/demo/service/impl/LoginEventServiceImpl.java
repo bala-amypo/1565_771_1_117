@@ -20,7 +20,7 @@ public class LoginEventServiceImpl implements LoginEventService {
             throw new BadRequestException("IP and Device ID required");
 
         LoginEvent saved = loginRepo.save(event);
-        ruleEvaluator.evaluateLoginEvent(saved);
+        // ruleEvaluator.evaluateLoginEvent(saved);
         return saved;
     }
 
