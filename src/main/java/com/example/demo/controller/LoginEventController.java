@@ -10,33 +10,29 @@ import com.example.demo.entity.LoginEvent;
 import com.example.demo.service.LoginEventService;
 
 @RestController
-@RequestMapping("/logins")
+@RequestMapping("/api/logins")
 public class LoginEventController {
 
     @Autowired
     LoginEventService loginEventService;
 
-    @PostMapping
-    public ResponseEntity<LoginEvent> recordLogin(@RequestBody LoginEvent event) {
-        return ResponseEntity.status(201)
-                .body(loginEventService.recordLogin(event));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<LoginEvent>> getAllEvents() {
-        List<LoginEvent> events = loginEventService.getAllEvents();
-        return ResponseEntity.status(200).body(events);
+    @PostMapping("/record")
+    public ResponseEntity<LoginEvent> record(@RequestBody LoginEvent event) {
+        return ResponseEntity.status(201).body(loginEventService.recordLogin(event));
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<LoginEvent>> getEventsByUser(@PathVariable Long userId) {
-        return ResponseEntity.status(200)
-                .body(loginEventService.getEventByUser(userId));
+    public ResponseEntity<List<LoginEvent>> byUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginEventService.getEventsByUser(userId));
     }
 
     @GetMapping("/suspicious/{userId}")
-    public ResponseEntity<List<LoginEvent>> getSuspiciousLogins(@PathVariable Long userId) {
-        return ResponseEntity.status(200)
-                .body(loginEventService.getSuspiciousLogins(userId));
+    public ResponseEntity<List<LoginEvent>> suspicious(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginEventService.getSuspiciousLogins(userId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LoginEvent>> getAll() {
+        return ResponseEntity.ok(loginEventService.getAllEvents());
     }
 }
