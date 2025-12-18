@@ -10,40 +10,30 @@ import com.example.demo.entity.PolicyRule;
 import com.example.demo.service.PolicyRuleService;
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/api/rules")
 public class PolicyRuleController {
 
     @Autowired
     PolicyRuleService policyRuleService;
 
     @PostMapping
-    public ResponseEntity<PolicyRule> createRule(@RequestBody PolicyRule rule) {
-        return ResponseEntity.status(201)
-                .body(policyRuleService.createRule(rule));
+    public ResponseEntity<PolicyRule> create(@RequestBody PolicyRule rule) {
+        return ResponseEntity.status(201).body(policyRuleService.createRule(rule));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PolicyRule> updateRule(@PathVariable Long id,
-                                                 @RequestBody PolicyRule rule) {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.updateRule(id, rule));
+    public ResponseEntity<PolicyRule> update(@PathVariable Long id,
+                                             @RequestBody PolicyRule rule) {
+        return ResponseEntity.ok(policyRuleService.updateRule(id, rule));
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<PolicyRule>> getActiveRules() {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.getActiveRules());
+    public ResponseEntity<List<PolicyRule>> activeRules() {
+        return ResponseEntity.ok(policyRuleService.getActiveRules());
     }
 
     @GetMapping
-    public ResponseEntity<List<PolicyRule>> getAllRules() {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.getAllRules());
-    }
-
-    @GetMapping("/{ruleCode}")
-    public ResponseEntity<PolicyRule> getRuleByCode(@PathVariable String ruleCode) {
-        return ResponseEntity.status(200)
-                .body(policyRuleService.getRuleByCode(ruleCode));
+    public ResponseEntity<List<PolicyRule>> getAll() {
+        return ResponseEntity.ok(policyRuleService.getAllRules());
     }
 }
