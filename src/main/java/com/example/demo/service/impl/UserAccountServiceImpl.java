@@ -1,24 +1,22 @@
-package com.example.demo.service.impl;
+package com.example.demo1.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.UserAccount;
-import com.example.demo.service.UserAccountService;
+import com.example.demo1.entity.UserAccount;
+import com.example.demo1.service.UserAccountService;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
     List<UserAccount> users = new ArrayList<>();
-    private Long id = 1L;
+    long id = 1;
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        user.setId(id.intValue()); 
-        id++;
-    
+        user.setId(id++);
         users.add(user);
         return user;
     }
@@ -26,7 +24,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount getUserById(Long id) {
         for (UserAccount u : users) {
-            if (Long.valueOf(u.getId())==(id)) {
+            if (u.getId()==id) {
                 return u;
             }
         }
@@ -51,7 +49,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
         for (UserAccount u : users) {
-            if (Long.valueOf(u.getId())==(id)) {
+            if (u.getId()==id) {
                 u.setStatus(status);
                 return u;
             }

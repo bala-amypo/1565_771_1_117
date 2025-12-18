@@ -1,12 +1,12 @@
-package com.example.demo.service.impl;
+package com.example.demo1.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.PolicyRule;
-import com.example.demo.service.PolicyRuleService;
+import com.example.demo1.entity.PolicyRule;
+import com.example.demo1.service.PolicyRuleService;
 
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
