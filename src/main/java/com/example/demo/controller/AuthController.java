@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired // This tells Spring to find the service and plug it in here
+    @Autowired 
     UserAccountService userService; 
 
     @PostMapping("/register")
