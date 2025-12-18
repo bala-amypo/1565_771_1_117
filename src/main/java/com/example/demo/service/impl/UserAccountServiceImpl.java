@@ -4,18 +4,17 @@ import com.example.demo.entity.UserAccount;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
+    // private final PasswordEncoder passwordEncoder;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public UserAccount createUser(UserAccount user) {
