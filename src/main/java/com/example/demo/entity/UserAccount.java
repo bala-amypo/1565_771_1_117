@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String employeeId;
     private String username;
     private String email;
@@ -31,10 +31,10 @@ public class UserAccount {
         this.status = status;
         this.createdAt = createdAt;
     }
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getEmployeeId() {
