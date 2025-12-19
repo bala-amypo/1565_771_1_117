@@ -18,7 +18,7 @@ public class UserAccountController {
 
     @PostMapping
     public UserAccount create(@RequestBody UserAccount user) {
-        return userService.create(user);
+        return userService.createUser(user); 
     }
 
 
