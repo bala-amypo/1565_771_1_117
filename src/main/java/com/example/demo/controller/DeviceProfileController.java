@@ -23,8 +23,7 @@ public class DeviceProfileController {
     }
 
     @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(@PathVariable Long id,
-                                     @RequestParam boolean trust) {
+    public DeviceProfile updateTrust(@PathVariable Long id, @RequestParam boolean trust) {
         return deviceService.updateTrustStatus(id, trust);
     }
 
