@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    PolicyRuleService ruleService;   // no private, no final
+    PolicyRuleService ruleService;  
 
     public PolicyRuleController(PolicyRuleService ruleService) {
         this.ruleService = ruleService;
@@ -22,8 +22,7 @@ public class PolicyRuleController {
     }
 
     @PutMapping("/{id}")
-    public PolicyRule update(@PathVariable Long id,
-                             @RequestBody PolicyRule rule) {
+    public PolicyRule update(@PathVariable Long id, @RequestBody PolicyRule rule) {
         return ruleService.updateRule(id, rule);
     }
 
