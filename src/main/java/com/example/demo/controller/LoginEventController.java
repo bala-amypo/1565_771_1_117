@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/api/logins")
 public class LoginEventController {
 
-    LoginEventService loginService;   l
+    LoginEventService loginService;   // no private, no final
 
     public LoginEventController(LoginEventService loginService) {
         this.loginService = loginService;
