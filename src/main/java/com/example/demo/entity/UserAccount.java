@@ -21,8 +21,7 @@ public class UserAccount {
     private LocalDateTime createdAt;
     public UserAccount() {
     }
-    public UserAccount(String employeeId, String username, String email, String password, String role, String status,
-            LocalDateTime createdAt) {
+    public UserAccount(String employeeId, String username, String email, String password, String role, String status, LocalDateTime createdAt) {
         this.employeeId = employeeId;
         this.username = username;
         this.email = email;
