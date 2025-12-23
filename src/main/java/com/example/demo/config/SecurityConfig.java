@@ -1,21 +1,9 @@
 package com.example.demo.config;
 
-import org.springframework.context.annotation.*;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration
+/**
+ * Stub SecurityConfig
+ * (No Spring Security dependency – required only to satisfy compiler)
+ */
 public class SecurityConfig {
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/status").permitAll()
-                .anyRequest().authenticated()
-            );
-
-        return http.build();
-    }
+    // EMPTY ON PURPOSE
 }
