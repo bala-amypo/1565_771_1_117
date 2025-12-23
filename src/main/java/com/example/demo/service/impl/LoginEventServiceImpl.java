@@ -1,38 +1,35 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.LoginEvent;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.repository.LoginEventRepository;
-import com.example.demo.service.LoginEventService;
-import java.util.List;
-import org.springframework.stereotype.Service;
-@Service
+import java.util.*;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
+import com.example.demo.service.*;
+import com.example.demo.util.RuleEvaluationUtil;
+
 public class LoginEventServiceImpl implements LoginEventService {
 
-    private final LoginEventRepository loginRepo;
+    LoginEventRepository repo;
+    RuleEvaluationUtil util;
 
-    public LoginEventServiceImpl(LoginEventRepository loginRepo) {
-        this.loginRepo = loginRepo;
-    
+    public LoginEventServiceImpl(LoginEventRepository r, RuleEvaluationUtil u) {
+        repo = r; util = u;
     }
 
-    public LoginEvent recordLogin(LoginEvent event) {
-        if (event.getIpAddress() == null || event.getDeviceId() == null)
-            throw new BadRequestException("IP and Device ID required");
-
-        LoginEvent saved = loginRepo.save(event);
+    public LoginEvent recordLogin(LoginEvent e) {
+        LoginEvent saved = repo.save(e);
+        util.evaluateLoginEvent(saved);
         return saved;
     }
 
-    public List<LoginEvent> getEventsByUser(Long userId) {
-        return loginRepo.findByUserId(userId);
+    public List<LoginEvent> getEventsByUser(Long id) {
+        return repo.findByUserId(id);
     }
 
-    public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
+    public List<LoginEvent> getSuspiciousLogins(Long id) {
+        return repo.findByUserIdAndLoginStatus(id, "FAILED");
     }
 
     public List<LoginEvent> getAllEvents() {
-        return loginRepo.findAll();
+        return repo.findAll();
     }
 }

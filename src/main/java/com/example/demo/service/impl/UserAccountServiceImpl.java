@@ -1,43 +1,43 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.UserAccount;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.UserAccountRepository;
-import com.example.demo.service.UserAccountService;
 import java.time.LocalDateTime;
 import java.util.*;
-import org.springframework.stereotype.Service;
-@Service
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
+import com.example.demo.service.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
+    UserAccountRepository repo;
+    PasswordEncoder encoder;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo) {
-        this.userRepo = userRepo;
+    public UserAccountServiceImpl(UserAccountRepository r, PasswordEncoder e) {
+        repo = r; encoder = e;
     }
 
-    public UserAccount createUser(UserAccount user) {
-        if (user.getStatus() == null) user.setStatus("ACTIVE");
-        user.setCreatedAt(LocalDateTime.now());
-        return userRepo.save(user);
+    public UserAccount createUser(UserAccount u) {
+        u.setPassword(encoder.encode(u.getPassword()));
+        if (u.getStatus() == null) u.setStatus("ACTIVE");
+        u.setCreatedAt(LocalDateTime.now());
+        return repo.save(u);
     }
 
     public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return repo.findById(id).orElse(null);
     }
 
     public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = getUserById(id);
-        user.setStatus(status);
-        return userRepo.save(user);
+        UserAccount u = getUserById(id);
+        u.setStatus(status);
+        return repo.save(u);
     }
 
     public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
+        return repo.findAll();
     }
 
     public Optional<UserAccount> findByUsername(String username) {
-        return userRepo.findByUsername(username);
+        return repo.findByUsername(username);
     }
 }
