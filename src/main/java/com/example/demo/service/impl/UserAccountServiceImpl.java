@@ -1,44 +1,58 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.*;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import com.example.demo.security.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    UserAccountRepository repo;
-    PasswordEncoder encoder;
+    private final UserAccountRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserAccountServiceImpl(UserAccountRepository r, PasswordEncoder e) {
-        repo = r;
-        encoder = e;
+    public UserAccountServiceImpl(UserAccountRepository userRepo,
+                                  PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public UserAccount createUser(UserAccount u) {
-        u.setPassword(encoder.encode(u.getPassword()));
-        if (u.getStatus() == null) u.setStatus("ACTIVE");
-        u.setCreatedAt(LocalDateTime.now());
-        return repo.save(u);
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getStatus() == null) {
+            user.setStatus("ACTIVE");
+        }
+
+        user.setCreatedAt(LocalDateTime.now());
+        return userRepo.save(user);
     }
 
+    @Override
     public UserAccount getUserById(Long id) {
-        return repo.findById(id).orElse(null);
+        return userRepo.findById(id).orElseThrow();
     }
 
+    @Override
     public UserAccount updateUserStatus(Long id, String status) {
         UserAccount u = getUserById(id);
         u.setStatus(status);
-        return repo.save(u);
+        return userRepo.save(u);
     }
 
+    @Override
     public List<UserAccount> getAllUsers() {
-        return repo.findAll();
+        return userRepo.findAll();
     }
 
+    @Override
     public Optional<UserAccount> findByUsername(String username) {
-        return repo.findByUsername(username);
+        return userRepo.findByUsername(username);
     }
 }
