@@ -5,7 +5,9 @@ import com.example.demo.entity.DeviceProfile;
 import java.util.List;
 import java.util.Optional;
 
-public interface DeviceProfileRepository extends JpaRepository<DeviceProfile, Long> {
-    List<DeviceProfile> findByUserId(Long userId);
+public interface DeviceProfileRepository {
+    DeviceProfile save(DeviceProfile d);
+    Optional<DeviceProfile> findById(Long id);
     Optional<DeviceProfile> findByDeviceId(String deviceId);
+    List<DeviceProfile> findByUserId(Long userId);
 }
