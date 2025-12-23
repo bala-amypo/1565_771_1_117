@@ -2,10 +2,10 @@ package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.repository.UserAccountRepository;
+import com.example.demo.service.UserAccountService;
+import com.example.demo.security.PasswordEncoder;
 
 public class UserAccountServiceImpl implements UserAccountService {
 
@@ -13,7 +13,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     PasswordEncoder encoder;
 
     public UserAccountServiceImpl(UserAccountRepository r, PasswordEncoder e) {
-        repo = r; encoder = e;
+        repo = r;
+        encoder = e;
     }
 
     public UserAccount createUser(UserAccount u) {
