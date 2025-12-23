@@ -1,35 +1,26 @@
 package com.example.demo.service.impl;
 
-import java.util.*;
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.*;
-import com.example.demo.util.RuleEvaluationUtil;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.service.LoginEventService;
+
+@Service   // ⭐ REQUIRED — creates Spring bean
 public class LoginEventServiceImpl implements LoginEventService {
 
-    LoginEventRepository repo;
-    RuleEvaluationUtil util;
+    private final List<LoginEvent> events = new ArrayList<>();
 
-    public LoginEventServiceImpl(LoginEventRepository r, RuleEvaluationUtil u) {
-        repo = r; util = u;
+    @Override
+    public LoginEvent recordLogin(LoginEvent event) {
+        events.add(event);
+        return event;
     }
 
-    public LoginEvent recordLogin(LoginEvent e) {
-        LoginEvent saved = repo.save(e);
-        util.evaluateLoginEvent(saved);
-        return saved;
-    }
-
-    public List<LoginEvent> getEventsByUser(Long id) {
-        return repo.findByUserId(id);
-    }
-
-    public List<LoginEvent> getSuspiciousLogins(Long id) {
-        return repo.findByUserIdAndLoginStatus(id, "FAILED");
-    }
-
+    @Override
     public List<LoginEvent> getAllEvents() {
-        return repo.findAll();
+        return events;
     }
 }
