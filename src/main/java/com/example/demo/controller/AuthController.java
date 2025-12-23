@@ -2,23 +2,31 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
-@RestController
-@RequestMapping("/auth")
+/**
+ * Authentication Controller
+ * Handles user registration and simple login
+ */
 public class AuthController {
 
-    @Autowired
-    UserAccountService userService; 
+    UserAccountService userService;
 
-    @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
-        return userService.createUser(user);
+    public AuthController(UserAccountService userService) {
+        this.userService = userService;
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody UserAccount user) {
-        return "Login successful for user: " + user.getUsername();
+    /**
+     * Register a new user
+     */
+    public ResponseEntity<UserAccount> register(UserAccount user) {
+        return ResponseEntity.ok(userService.createUser(user));
+    }
+
+    /**
+     * Simple login (no JWT / no security)
+     */
+    public ResponseEntity<String> login() {
+        return ResponseEntity.ok("Login successful");
     }
 }
