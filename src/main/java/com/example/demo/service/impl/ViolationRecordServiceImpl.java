@@ -1,40 +1,29 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ViolationRecord;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ViolationRecordRepository;
-import com.example.demo.service.ViolationRecordService;
-import java.util.List;
-import org.springframework.stereotype.Service;
-@Service
+import java.util.*;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
+import com.example.demo.service.*;
+
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final ViolationRecordRepository violationRepo;
+    ViolationRecordRepository repo;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository violationRepo) {
-        this.violationRepo = violationRepo;
+    public ViolationRecordServiceImpl(ViolationRecordRepository r) {
+        repo = r;
     }
 
-    public ViolationRecord logViolation(ViolationRecord violation) {
-        return violationRepo.save(violation);
-    }
-
-    public List<ViolationRecord> getViolationsByUser(Long userId) {
-        return violationRepo.findByUserId(userId);
-    }
-
-    public ViolationRecord markResolved(Long id) {
-        ViolationRecord record = violationRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Violation not found"));
-        record.setResolved(true);
-        return violationRepo.save(record);
+    public ViolationRecord logViolation(ViolationRecord v) {
+        return repo.save(v);
     }
 
     public List<ViolationRecord> getUnresolvedViolations() {
-        return violationRepo.findByResolvedFalse();
+        return repo.findByResolvedFalse();
     }
 
-    public List<ViolationRecord> getAllViolations() {
-        return violationRepo.findAll();
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord v = repo.findById(id).orElse(null);
+        v.setResolved(true);
+        return repo.save(v);
     }
 }
