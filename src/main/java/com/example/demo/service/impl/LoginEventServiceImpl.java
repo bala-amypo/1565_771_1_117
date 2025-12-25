@@ -4,6 +4,7 @@ import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
 import com.example.demo.util.RuleEvaluationUtil;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,11 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
+    public List<LoginEvent> getAllEvents() {
+        return loginRepo.findAll();
+    }
+
+    @Override
     public List<LoginEvent> getEventsByUser(Long userId) {
         return loginRepo.findByUserId(userId);
     }
@@ -35,10 +41,5 @@ public class LoginEventServiceImpl implements LoginEventService {
     @Override
     public List<LoginEvent> getSuspiciousLogins(Long userId) {
         return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
-    }
-
-    @Override
-    public List<LoginEvent> getAllEvents() {
-        return loginRepo.findAll();
     }
 }

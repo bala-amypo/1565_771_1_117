@@ -12,33 +12,29 @@ import java.util.List;
 @RequestMapping("/api/logins")
 public class LoginEventController {
 
-    private final LoginEventService loginEventService;
+    private final LoginEventService service;
 
-    public LoginEventController(LoginEventService loginEventService) {
-        this.loginEventService = loginEventService;
+    public LoginEventController(LoginEventService service) {
+        this.service = service;
     }
 
-    // POST /api/logins/record
     @PostMapping("/record")
-    public ResponseEntity<LoginEvent> record(@RequestBody LoginEvent event) {
-        return ResponseEntity.ok(loginEventService.recordLogin(event));
+    public ResponseEntity<LoginEvent> record(@RequestBody LoginEvent e) {
+        return ResponseEntity.ok(service.recordLogin(e));
     }
 
-    // GET /api/logins
     @GetMapping
     public ResponseEntity<List<LoginEvent>> all() {
-        return ResponseEntity.ok(loginEventService.getAllEvents());
+        return ResponseEntity.ok(service.getAllEvents());
     }
 
-    // GET /api/logins/user/{userId}
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<LoginEvent>> byUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(loginEventService.getEventsByUser(userId));
+        return ResponseEntity.ok(service.getEventsByUser(userId));
     }
 
-    // GET /api/logins/suspicious/{userId}
     @GetMapping("/suspicious/{userId}")
     public ResponseEntity<List<LoginEvent>> suspicious(@PathVariable Long userId) {
-        return ResponseEntity.ok(loginEventService.getSuspiciousLogins(userId));
+        return ResponseEntity.ok(service.getSuspiciousLogins(userId));
     }
 }

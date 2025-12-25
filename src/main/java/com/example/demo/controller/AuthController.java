@@ -1,32 +1,38 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
-import org.springframework.http.ResponseEntity;
 
-/**
- * Authentication Controller
- * Handles user registration and simple login
- */
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
 public class AuthController {
 
-    UserAccountService userService;
+    private final UserAccountService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService userService) {
+    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
-    /**
-     * Register a new user
-     */
-    public ResponseEntity<UserAccount> register(UserAccount user) {
+    @PostMapping("/register")
+    public ResponseEntity<UserAccount> register(@RequestBody UserAccount user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
-    /**
-     * Simple login (no JWT / no security)
-     */
-    public ResponseEntity<String> login() {
-        return ResponseEntity.ok("Login successful");
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserAccount user) {
+        UserAccount u = userService.getByEmail(user.getEmail());
+        String token = jwtUtil.generateToken(
+                u.getUsername(),
+                u.getId(),
+                u.getEmail(),
+                u.getRole()
+        );
+        return ResponseEntity.ok(token);
     }
 }
