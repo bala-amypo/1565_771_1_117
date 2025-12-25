@@ -13,6 +13,6 @@ public interface UserAccountService {
 
     UserAccount updateUserStatus(Long id, String status);
 
-    // ✅ REQUIRED FOR AuthController
+    
     UserAccount getByEmail(String email);
 }
