@@ -1,13 +1,18 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserAccount;
-import java.util.*;
+import java.util.List;
 
 public interface UserAccountService {
-    UserAccount createUser(UserAccount u);
+
+    UserAccount createUser(UserAccount user);
+
     UserAccount getUserById(Long id);
-    UserAccount updateUserStatus(Long id, String status);
+
     List<UserAccount> getAllUsers();
-    Optional<UserAccount> findByUsername(String username);
+
+    UserAccount updateUserStatus(Long id, String status);
+
+    // ✅ REQUIRED FOR AuthController
+    UserAccount getByEmail(String email);
 }
-    
