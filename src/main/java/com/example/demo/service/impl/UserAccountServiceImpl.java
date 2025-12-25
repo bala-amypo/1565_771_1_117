@@ -45,4 +45,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     public List<UserAccount> getAllUsers() {
         return userRepo.findAll();
     }
+
+    // ✅ MISSING METHOD — NOW IMPLEMENTED
+    @Override
+    public UserAccount getByEmail(String email) {
+        return userRepo.findByEmail(email).orElse(null);
+    }
 }

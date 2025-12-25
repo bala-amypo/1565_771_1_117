@@ -9,10 +9,10 @@ public interface UserAccountService {
 
     UserAccount getUserById(Long id);
 
-    List<UserAccount> getAllUsers();
-
     UserAccount updateUserStatus(Long id, String status);
 
-    
+    List<UserAccount> getAllUsers();
+
+    // ✅ REQUIRED
     UserAccount getByEmail(String email);
 }
