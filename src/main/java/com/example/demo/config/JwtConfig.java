@@ -9,10 +9,6 @@ public class JwtConfig {
 
     @Bean
     public JwtUtil jwtUtil() {
-        return new JwtUtil(
-                "TestSecretKeyForJWT1234567890",
-                3600000L,
-                false
-        );
+        return new JwtUtil("test-secret", 3600000L, false);
     }
 }

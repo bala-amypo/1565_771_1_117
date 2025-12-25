@@ -1,7 +1,6 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
-import java.util.Date;
+import java.util.Base64;
 
 public class JwtUtil {
 
@@ -15,26 +14,16 @@ public class JwtUtil {
         this.testMode = testMode;
     }
 
+    // TOKEN FORMAT:
+    // username|userId|email|role
     public String generateToken(String username, Long userId, String email, String role) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("userId", userId);
-        claims.put("email", email);
-        claims.put("role", role);
-
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + validityInMs);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expiry)
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
+        String tokenData = username + "|" + userId + "|" + email + "|" + role;
+        return Base64.getEncoder().encodeToString(tokenData.getBytes());
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Base64.getDecoder().decode(token);
             return true;
         } catch (Exception e) {
             return false;
@@ -42,21 +31,19 @@ public class JwtUtil {
     }
 
     public String getEmail(String token) {
-        return getClaims(token).get("email", String.class);
+        return decode(token)[2];
     }
 
     public String getRole(String token) {
-        return getClaims(token).get("role", String.class);
+        return decode(token)[3];
     }
 
     public Long getUserId(String token) {
-        return getClaims(token).get("userId", Long.class);
+        return Long.valueOf(decode(token)[1]);
     }
 
-    private Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+    private String[] decode(String token) {
+        String decoded = new String(Base64.getDecoder().decode(token));
+        return decoded.split("\\|");
     }
 }
