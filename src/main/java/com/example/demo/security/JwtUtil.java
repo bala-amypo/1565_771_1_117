@@ -1,27 +1,62 @@
 package com.example.demo.security;
 
+import io.jsonwebtoken.*;
+import java.util.Date;
+
 public class JwtUtil {
 
-    public JwtUtil(String secret, long validity, boolean testMode) {
+    private final String secret;
+    private final long validityInMs;
+    private final boolean testMode;
+
+    public JwtUtil(String secret, long validityInMs, boolean testMode) {
+        this.secret = secret;
+        this.validityInMs = validityInMs;
+        this.testMode = testMode;
     }
 
     public String generateToken(String username, Long userId, String email, String role) {
-        return username + "|" + userId + "|" + email + "|" + role;
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("userId", userId);
+        claims.put("email", email);
+        claims.put("role", role);
+
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityInMs);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
     public boolean validateToken(String token) {
-        return token != null && token.contains("|");
+        try {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String getEmail(String token) {
-        return token.split("\\|")[2];
+        return getClaims(token).get("email", String.class);
     }
 
     public String getRole(String token) {
-        return token.split("\\|")[3];
+        return getClaims(token).get("role", String.class);
     }
 
     public Long getUserId(String token) {
-        return Long.valueOf(token.split("\\|")[1]);
+        return getClaims(token).get("userId", Long.class);
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
