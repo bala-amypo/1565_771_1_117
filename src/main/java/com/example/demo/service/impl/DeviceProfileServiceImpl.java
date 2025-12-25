@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service   // ✅ THIS WAS MISSING
+@Service  
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     private DeviceProfileRepository deviceRepo;
