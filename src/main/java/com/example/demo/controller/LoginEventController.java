@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.LoginEvent;
 import com.example.demo.service.LoginEventService;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/logins")
@@ -17,13 +18,27 @@ public class LoginEventController {
         this.loginEventService = loginEventService;
     }
 
-    @PostMapping
-    public LoginEvent record(@RequestBody LoginEvent event) {
-        return loginEventService.recordLogin(event);
+    // POST /api/logins/record
+    @PostMapping("/record")
+    public ResponseEntity<LoginEvent> record(@RequestBody LoginEvent event) {
+        return ResponseEntity.ok(loginEventService.recordLogin(event));
     }
 
+    // GET /api/logins
     @GetMapping
-    public List<LoginEvent> getAll() {
-        return loginEventService.getAllEvents();
+    public ResponseEntity<List<LoginEvent>> all() {
+        return ResponseEntity.ok(loginEventService.getAllEvents());
+    }
+
+    // GET /api/logins/user/{userId}
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<LoginEvent>> byUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginEventService.getEventsByUser(userId));
+    }
+
+    // GET /api/logins/suspicious/{userId}
+    @GetMapping("/suspicious/{userId}")
+    public ResponseEntity<List<LoginEvent>> suspicious(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginEventService.getSuspiciousLogins(userId));
     }
 }
