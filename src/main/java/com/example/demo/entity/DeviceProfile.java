@@ -38,7 +38,6 @@ public class DeviceProfile {
     public Boolean getIsTrusted() { return isTrusted; }
     public void setIsTrusted(Boolean isTrusted) { this.isTrusted = isTrusted; }
 
-    // ✅ REQUIRED BY TEST
     public LocalDateTime getLastSeen() { return lastSeen; }
     public void setLastSeen(LocalDateTime lastSeen) { this.lastSeen = lastSeen; }
 }
