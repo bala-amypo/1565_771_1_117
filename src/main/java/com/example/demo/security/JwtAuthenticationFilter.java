@@ -22,13 +22,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
+    // @Override
+    // protected boolean shouldNotFilter(HttpServletRequest request) {
+    //     String path = request.getServletPath();
+    //     return path.startsWith("/auth")
+    //         || path.startsWith("/swagger")
+    //         || path.startsWith("/v3/api-docs");
+    // }
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        return path.startsWith("/auth")
-            || path.startsWith("/swagger")
-            || path.startsWith("/v3/api-docs");
-    }
+protected boolean shouldNotFilter(HttpServletRequest request) {
+
+    String path = request.getRequestURI();  // ✅ IMPORTANT FIX
+
+    return path.startsWith("/auth")
+        || path.startsWith("/swagger")
+        || path.startsWith("/v3/api-docs");
+}
+
 
     @Override
     protected void doFilterInternal(
