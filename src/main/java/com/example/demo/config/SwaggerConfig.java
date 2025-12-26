@@ -17,18 +17,20 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .info(new Info()
-                        .title("Demo API")
-                        .version("1.0"))
-                .servers(List.of(
-                        new Server().url("https://9089.pro604cr.amypo.ai")
-                ))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")));
+            .info(new Info()
+                .title("Demo API")
+                .version("1.0"))
+            .servers(List.of(
+                new Server().url("https://9089.pro604cr.amypo.ai")
+            ))
+            .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+            .components(new Components()
+                .addSecuritySchemes("bearerAuth",
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+                )
+            );
     }
 }
