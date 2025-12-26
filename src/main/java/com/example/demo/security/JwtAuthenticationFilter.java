@@ -29,16 +29,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //         || path.startsWith("/swagger")
     //         || path.startsWith("/v3/api-docs");
     // }
-    @Override
+//     @Override
+// protected boolean shouldNotFilter(HttpServletRequest request) {
+
+//     String path = request.getRequestURI();  // ✅ IMPORTANT FIX
+
+//     return path.startsWith("/auth")
+//         || path.startsWith("/swagger")
+//         || path.startsWith("/v3/api-docs");
+// }
+
+@Override
 protected boolean shouldNotFilter(HttpServletRequest request) {
 
-    String path = request.getRequestURI();  // ✅ IMPORTANT FIX
+    String uri = request.getRequestURI();
 
-    return path.startsWith("/auth")
-        || path.startsWith("/swagger")
-        || path.startsWith("/v3/api-docs");
+    // LOG THIS (TEMPORARY)
+    System.out.println("Incoming URI: " + uri);
+
+    return uri.contains("/auth/register")
+        || uri.contains("/auth/login")
+        || uri.contains("/swagger")
+        || uri.contains("/v3/api-docs");
 }
-
 
     @Override
     protected void doFilterInternal(
