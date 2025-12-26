@@ -23,7 +23,7 @@ public class JwtUtil {
         this.enabled = true;
     }
 
-    // ✅ REQUIRED SIGNATURE
+    // token format: email:userId:role:username
     public String generateToken(String email, Long userId, String role, String username) {
         return email + ":" + userId + ":" + role + ":" + username;
     }
@@ -32,19 +32,20 @@ public class JwtUtil {
         return token != null && token.split(":").length == 4;
     }
 
-    public String getEmail(String token) {
+    // ✅ TEST EXPECTS THESE METHODS
+    public String extractEmail(String token) {
         return token.split(":")[0];
     }
 
-    public Long getUserId(String token) {
+    public Long extractUserId(String token) {
         return Long.parseLong(token.split(":")[1]);
     }
 
-    public String getRole(String token) {
+    public String extractRole(String token) {
         return token.split(":")[2];
     }
 
-    public String getUsername(String token) {
+    public String extractUsername(String token) {
         return token.split(":")[3];
     }
 }
