@@ -11,44 +11,30 @@ import java.util.List;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private UserAccountRepository userRepo;
-    private PasswordEncoder passwordEncoder;
+    private final UserAccountRepository repo;
+    private final PasswordEncoder encoder;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo,
-                                  PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    public UserAccountServiceImpl(UserAccountRepository repo, PasswordEncoder encoder) {
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
-    @Override
     public UserAccount createUser(UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        user.setPassword(encoder.encode(user.getPassword()));
+        return repo.save(user);
     }
 
-    @Override
     public UserAccount getUserById(Long id) {
-        return userRepo.findById(id).orElse(null);
+        return repo.findById(id).orElse(null);
     }
 
-    @Override
     public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = userRepo.findById(id).orElse(null);
-        if (user != null) {
-            user.setStatus(status);
-            return userRepo.save(user);
-        }
-        return null;
+        UserAccount u = repo.findById(id).orElseThrow();
+        u.setStatus(status);
+        return repo.save(u);
     }
 
-    @Override
     public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
-    }
-
-    // ✅ MISSING METHOD — NOW IMPLEMENTED
-    @Override
-    public UserAccount getByEmail(String email) {
-        return userRepo.findByEmail(email).orElse(null);
+        return repo.findAll();
     }
 }
