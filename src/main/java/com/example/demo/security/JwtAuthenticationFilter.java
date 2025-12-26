@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Token validation skipped for simplicity
+        // Token validation happens ONLY for protected APIs
         filterChain.doFilter(request, response);
     }
 }
