@@ -25,7 +25,7 @@ public class SwaggerConfig {
                 // 🔹 SERVER CONFIGURATION
                 .servers(List.of(
                         new Server()
-                                .url("https://localhost:8080")
+                                .url("https://9089.pro604cr.amypo.ai")
                                 .description("Local Development Server")
                 ))
 
