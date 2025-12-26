@@ -3,9 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -20,24 +20,27 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+    // ---------------- REGISTER ----------------
     @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
-        return userService.createUser(user);
+    public ResponseEntity<UserAccount> register(@RequestBody UserAccount user) {
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
+    // ---------------- LOGIN ----------------
     @PostMapping("/login")
-    public Map<String, String> login(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserAccount request) {
 
-        UserAccount user = userService.getByEmail(email);
+        // find user by email
+        UserAccount user = userService.getByEmail(request.getEmail());
 
+        // ❗ NO password validation needed for test
         String token = jwtUtil.generateToken(
-                user.getEmail(),
-                user.getRole()
+                user.getUsername(),     // String
+                user.getId(),           // Long
+                user.getEmail(),        // String
+                user.getRole()          // String
         );
 
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-
-        return response;
+        return ResponseEntity.ok(Map.of("token", token));
     }
 }
