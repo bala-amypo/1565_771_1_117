@@ -27,7 +27,5 @@ public class SwaggerConfig {
                         .bearerFormat("JWT")
                 )
             )
-            // 🔒 Apply security globally
-            .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
-    }
+}
 }
