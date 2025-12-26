@@ -3,9 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,19 +21,23 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserAccount> register(@RequestBody UserAccount user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public UserAccount register(@RequestBody UserAccount user) {
+        return userService.createUser(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserAccount user) {
-        UserAccount u = userService.getByEmail(user.getEmail());
+    public Map<String, String> login(@RequestParam String email) {
+
+        UserAccount user = userService.getByEmail(email);
+
         String token = jwtUtil.generateToken(
-                u.getUsername(),
-                u.getId(),
-                u.getEmail(),
-                u.getRole()
+                user.getEmail(),
+                user.getRole()
         );
-        return ResponseEntity.ok(token);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+
+        return response;
     }
 }
