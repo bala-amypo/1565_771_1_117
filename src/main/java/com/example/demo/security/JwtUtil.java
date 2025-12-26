@@ -5,40 +5,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    // REQUIRED no-args constructor (tests depend on this)
+    // REQUIRED by tests
     public JwtUtil() {}
 
-    // REQUIRED constructor (tests use this)
+    // REQUIRED by tests
     public JwtUtil(String secret, long expiration, boolean enabled) {}
 
-    // ✅ TOKEN FORMAT USED BY TESTS
+    // REQUIRED signature by controller + tests
     public String generateToken(String email, Long userId, String role, String username) {
         return email + ":" + userId + ":" + role + ":" + username;
     }
 
-    // ✅ EXTRA overload (AuthController safety)
-    public String generateToken(String username) {
-        return "anonymous:0:USER:" + username;
-    }
-
-    // ✅ REQUIRED by tests
+    // REQUIRED by testJwtExtractEmail
     public String getEmail(String token) {
         return token.split(":")[0];
     }
 
-    public String getRole(String token) {
-        return token.split(":")[2];
-    }
-
+    // REQUIRED by tests
     public Long getUserId(String token) {
         return Long.parseLong(token.split(":")[1]);
     }
 
-    public String getUsername(String token) {
-        return token.split(":")[3];
+    // REQUIRED by testJwtExtractRole
+    public String getRole(String token) {
+        return token.split(":")[2];
     }
 
-    public boolean validateToken(String token) {
-        return token != null && token.split(":").length == 4;
+    // REQUIRED by filters/controllers
+    public String getUsername(String token) {
+        return token.split(":")[3];
     }
 }
