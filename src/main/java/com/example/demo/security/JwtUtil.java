@@ -13,21 +13,18 @@ public class JwtUtil {
     private final long expiration;
     private final boolean enabled;
 
-    // REQUIRED constructor (used by tests)
     public JwtUtil(String secret, long expiration, boolean enabled) {
         this.secret = secret;
         this.expiration = expiration;
         this.enabled = enabled;
     }
 
-    // Default constructor (used by Spring)
     public JwtUtil() {
         this.secret = "default-secret";
         this.expiration = 3600000;
         this.enabled = true;
     }
 
-    // === REQUIRED BY TESTS ===
     public String generateToken(String username, long userId, String role, String extra) {
         return Jwts.builder()
                 .setSubject(username)
@@ -44,13 +41,12 @@ public class JwtUtil {
         return generateToken(username, userId, role, "");
     }
 
-    // 🔥 REQUIRED BY TESTS
-    public String getRole(String token) {
+    public String getEmail(String token) {
         return (String) Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody()
-                .get("role");
+                .getSubject();
     }
 
     public Long getUserId(String token) {
@@ -58,16 +54,14 @@ public class JwtUtil {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody()
-                .get("uid"))
-                .longValue();
+                .get("uid")).longValue();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public String getRole(String token) {
+        return (String) Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role");
     }
 }
