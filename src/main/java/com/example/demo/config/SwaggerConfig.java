@@ -19,7 +19,7 @@ public class SwaggerConfig {
                         .title("Demo API")
                         .version("1.0"))
                 .servers(List.of(
-                        new Server().url("http://localhost:9089")
+                        new Server().url("http://9089.pro604cr.amypo.ai")
                 ))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
