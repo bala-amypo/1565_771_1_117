@@ -30,24 +30,24 @@ public class SecurityConfig {
                 sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                // 🔓 PUBLIC ENDPOINTS (NO LOCK)
                 .requestMatchers(
                         "/auth/**",
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html"
                 ).permitAll()
-
-                // 🔒 ALL OTHERS NEED TOKEN
                 .anyRequest().authenticated()
             );
 
-        // 🚫 JWT FILTER SHOULD NOT AFFECT /auth/**
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }
 
+    // ✅ ONLY ONE PasswordEncoder IN PROJECT
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
