@@ -5,31 +5,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    private String secret;
-    private long expiration;
-    private boolean enabled;
-
-    // REQUIRED by test cases
-    public JwtUtil(String secret, long expiration, boolean enabled) {
-        this.secret = secret;
-        this.expiration = expiration;
-        this.enabled = enabled;
-    }
-
-    // REQUIRED by Spring
-    public JwtUtil() {
-        this.secret = "test-secret";
-        this.expiration = 3600000;
-        this.enabled = true;
-    }
-
-    // REQUIRED overloads
-    public String generateToken(String email) {
-        return email + ":0:USER:" + email;
-    }
-
+    // Simple token format for assignment
+    // email:userId:role:username
     public String generateToken(String email, Long userId, String role, String username) {
         return email + ":" + userId + ":" + role + ":" + username;
+    }
+
+    public boolean validateToken(String token) {
+        return token != null && token.split(":").length == 4;
     }
 
     public String getEmail(String token) {
@@ -46,9 +29,5 @@ public class JwtUtil {
 
     public String getUsername(String token) {
         return token.split(":")[3];
-    }
-
-    public boolean validateToken(String token) {
-        return token != null && token.split(":").length == 4;
     }
 }
