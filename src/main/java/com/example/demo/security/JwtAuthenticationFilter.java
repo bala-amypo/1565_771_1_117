@@ -1,10 +1,12 @@
 package com.example.demo.security;
 
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 @Component
@@ -12,9 +14,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().startsWith("/auth")
-            || request.getServletPath().startsWith("/swagger")
-            || request.getServletPath().startsWith("/v3/api-docs");
+        String path = request.getServletPath();
+        return path.startsWith("/auth")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs");
     }
 
     @Override
@@ -22,9 +25,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
-    ) throws IOException, jakarta.servlet.ServletException {
+    ) throws ServletException, IOException {
 
-        // Token validation skipped for assignment
+        // Do NOT block – just pass request
         filterChain.doFilter(request, response);
     }
 }
