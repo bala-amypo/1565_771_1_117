@@ -22,8 +22,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm ->
@@ -37,17 +36,15 @@ public class SecurityConfig {
                         "/swagger-ui.html"
                 ).permitAll()
                 .anyRequest().authenticated()
-            );
-
-        http.addFilterBefore(
+            )
+            .addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
-        );
+            );
 
         return http.build();
     }
 
-    // ✅ ONLY ONE PasswordEncoder IN PROJECT
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
