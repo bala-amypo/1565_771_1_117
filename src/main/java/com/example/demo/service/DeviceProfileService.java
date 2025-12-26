@@ -5,12 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeviceProfileService {
-
     DeviceProfile registerDevice(DeviceProfile device);
-
     DeviceProfile updateTrustStatus(Long id, boolean trust);
-
     List<DeviceProfile> getDevicesByUser(Long userId);
-
     Optional<DeviceProfile> findByDeviceId(String deviceId);
 }
