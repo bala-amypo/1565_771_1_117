@@ -25,27 +25,32 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf(csrf -> csrf.disable())
             .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
             .authorizeHttpRequests(auth -> auth
+
+                // 🔓 NO LOCK — PUBLIC APIs
                 .requestMatchers(
                         "/auth/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/v3/api-docs/**"
                 ).permitAll()
-                .anyRequest().authenticated()
-            );
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                // 🔒 LOCK — EVERYTHING ELSE
+                .anyRequest().authenticated()
+            )
+
+            // JWT filter
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ✅ REQUIRED to fix PasswordEncoder error
+    // ✅ REQUIRED (fixes PasswordEncoder error)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
