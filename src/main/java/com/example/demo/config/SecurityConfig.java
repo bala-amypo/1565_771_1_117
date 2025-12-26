@@ -22,19 +22,15 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // ✅ AUTH CONTROLLER — NO LOCK
+                // 🔓 NO LOCK
+                .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(
-                    "/auth/**"
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html"
                 ).permitAll()
 
-                // ✅ SWAGGER — NO LOCK
-                .requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui.html"
-                ).permitAll()
-
-                // 🔒 EVERYTHING ELSE NEEDS TOKEN
+                // 🔒 LOCKED
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
