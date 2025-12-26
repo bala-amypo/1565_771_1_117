@@ -4,6 +4,8 @@ import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -16,21 +18,24 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    // ✅ THIS FIXES YOUR ERROR (100%)
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // 🔓 NO LOCK
-                .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(
+                        "/auth/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/swagger-ui.html"
                 ).permitAll()
-
-                // 🔒 LOCKED
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
