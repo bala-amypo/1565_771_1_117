@@ -32,4 +32,9 @@ public class LoginEventServiceImpl implements LoginEventService {
     public List<LoginEvent> getSuspiciousLogins(Long userId) {
         return repo.findByUserIdAndLoginStatus(userId, "FAILED");
     }
+    @Override
+    public List<LoginEvent> getAllEvents() {
+        return repo.findAll();
+}
+
 }
