@@ -1,104 +1,43 @@
-// package com.example.demo.controller;
-
-// import com.example.demo.dto.LoginRequest;
-// import com.example.demo.dto.JwtResponse;
-// import org.springframework.web.bind.annotation.*;
-
-// @RestController
-// @RequestMapping("/auth")
-// public class AuthController {
-
-//     @PostMapping("/register")
-//     public String register() {
-//         return "REGISTER OK";
-//     }
-
-//     // ✅ Swagger will now show username & password
-//     @PostMapping("/login")
-//     public JwtResponse login(@RequestBody LoginRequest request) {
-
-//         // Token format REQUIRED by your tests
-//         // email:userId:role:username
-//         String email = request.getUsername() + "@test.com";
-//         Long userId = 1L;
-//         String role = "ADMIN";
-
-//         String token = email + ":" + userId + ":" + role + ":" + request.getUsername();
-
-//         return new JwtResponse(token, userId, email, role);
-//     }
-// }
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.UserAccount;
-import com.example.demo.repository.UserAccountRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import com.example.demo.security.JwtUtil;
+import com.example.demo.service.UserAccountService;
 
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserAccountRepository userAccountRepository;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UserAccountService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountRepository userAccountRepository) {
-        this.userAccountRepository = userAccountRepository;
+    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
-    // ✅ REAL REGISTER
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request) {
-
-        // Check duplicate username
-        userAccountRepository.findByUsername(request.getUsername())
-                .ifPresent(user -> {
-                    throw new RuntimeException("Username already exists");
-                });
+    public JwtResponse register(@RequestBody RegisterRequest request) {
 
         UserAccount user = new UserAccount();
-        user.setEmployeeId(request.getEmployeeId());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // 🔐 encrypted
+        user.setPassword(request.getPassword());
         user.setRole(request.getRole());
-        user.setStatus("ACTIVE");
-        user.setCreatedAt(LocalDateTime.now());
+        user.setEmployeeId(request.getEmployeeId());
 
-        userAccountRepository.save(user);
+        UserAccount saved = userService.createUser(user);
 
-        return "User registered successfully";
-    }
-
-    // ✅ LOGIN (UNCHANGED – TEST FORMAT)
-    @PostMapping("/login")
-    public JwtResponse login(@RequestBody LoginRequest request) {
-
-        UserAccount user = userAccountRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
-
-        // Token format REQUIRED by your tests
-        // email:userId:role:username
-        String token = user.getEmail() + ":" +
-                       user.getId() + ":" +
-                       user.getRole() + ":" +
-                       user.getUsername();
-
-        return new JwtResponse(
-                token,
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
+        String token = jwtUtil.generateToken(
+                saved.getUsername(),
+                saved.getId(),
+                saved.getRole()
         );
+
+        return new JwtResponse(token, saved.getId(), saved.getEmail(), saved.getRole());
     }
 }
