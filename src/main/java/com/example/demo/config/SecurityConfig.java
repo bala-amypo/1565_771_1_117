@@ -1,6 +1,5 @@
-package com.example.demo.config;
+package com.example.demo.security;
 
-import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,22 +19,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
+
+        http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/auth/**",
+                        "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/v3/api-docs/**"
+                        "/swagger-ui.html"
                 ).permitAll()
                 .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            );
 
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-    // ✅ FIXES PasswordEncoder ERROR
+    // 🔴 REQUIRED — fixes PasswordEncoder error
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
