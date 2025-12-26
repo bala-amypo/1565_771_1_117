@@ -2,8 +2,8 @@ package com.example.demo.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,16 +14,14 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
 
         SecurityScheme securityScheme = new SecurityScheme()
-                .name("Authorization")
+                .name("bearerAuth")
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
 
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(
-                        new Components()
-                                .addSecuritySchemes("bearerAuth", securityScheme)
-                );
+                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
+                // 🔒 Global security (for protected endpoints)
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
     }
 }
