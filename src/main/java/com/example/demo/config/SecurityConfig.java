@@ -18,26 +18,31 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+            // ❌ disable defaults that cause 401
             .csrf(csrf -> csrf.disable())
+            .httpBasic(basic -> basic.disable())
+            .formLogin(form -> form.disable())
+
+            // ❌ no session
             .sessionManagement(sm ->
                 sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+
+            // ✅ authorization
             .authorizeHttpRequests(auth -> auth
-                // 🔓 AUTH ENDPOINTS — NO LOCK
                 .requestMatchers(
                     "/auth/**",
                     "/swagger-ui/**",
                     "/v3/api-docs/**"
                 ).permitAll()
-
-                // 🔒 EVERYTHING ELSE LOCKED
                 .anyRequest().authenticated()
-            );
+            )
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            // ✅ JWT only for protected APIs
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
