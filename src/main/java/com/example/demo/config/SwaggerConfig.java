@@ -23,6 +23,9 @@ public class SwaggerConfig {
                             .type(SecurityScheme.Type.HTTP)
                             .scheme("bearer")
                             .bearerFormat("JWT")
+                            .servers(List.of(
+                new Server().url("https://9089.pro604cr.amypo.ai")
+            ))
                     )
             );
     }
