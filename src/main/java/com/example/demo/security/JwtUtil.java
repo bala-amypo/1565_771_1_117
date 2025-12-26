@@ -13,21 +13,21 @@ public class JwtUtil {
     private final long expiration;
     private final boolean enabled;
 
-    // REQUIRED BY TEST SUITE
+    // REQUIRED constructor (used by tests)
     public JwtUtil(String secret, long expiration, boolean enabled) {
         this.secret = secret;
         this.expiration = expiration;
         this.enabled = enabled;
     }
 
-    // Default constructor for Spring
+    // Default constructor (used by Spring)
     public JwtUtil() {
         this.secret = "default-secret";
         this.expiration = 3600000;
         this.enabled = true;
     }
 
-    // REQUIRED BY TESTS
+    // === REQUIRED BY TESTS ===
     public String generateToken(String username, long userId, String role, String extra) {
         return Jwts.builder()
                 .setSubject(username)
@@ -40,9 +40,26 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ALSO REQUIRED
     public String generateToken(String username, Long userId, String role) {
         return generateToken(username, userId, role, "");
+    }
+
+    // 🔥 REQUIRED BY TESTS
+    public String getRole(String token) {
+        return (String) Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role");
+    }
+
+    public Long getUserId(String token) {
+        return ((Number) Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("uid"))
+                .longValue();
     }
 
     public boolean validateToken(String token) {
@@ -52,21 +69,5 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public String getEmail(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-
-    public Long getUserId(String token) {
-        return ((Number) Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody()
-                .get("uid")).longValue();
     }
 }
