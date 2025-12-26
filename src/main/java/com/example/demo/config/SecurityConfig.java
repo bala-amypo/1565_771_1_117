@@ -19,7 +19,6 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-    // ✅ FIXES PasswordEncoder error WITHOUT extra file
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -28,19 +27,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(sm ->
-                sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.csrf(csrf -> csrf.disable())
+            .sessionManagement(s ->
+                s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                // ✅ AUTH CONTROLLER IS OPEN (NO LOCK, NO 401)
-                .requestMatchers("/auth/**").permitAll()
-
-                // swagger open
+                .requestMatchers("/auth/**").permitAll()   // ✅ NO LOCK
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-
-                // 🔒 everything else locked
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

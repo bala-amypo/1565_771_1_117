@@ -23,10 +23,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+            FilterChain filterChain) throws IOException, ServletException {
 
-        // JWT validation ONLY for protected APIs
+        // NO AUTH LOGIC FOR /auth/**
         filterChain.doFilter(request, response);
     }
 }
