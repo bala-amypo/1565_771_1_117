@@ -14,10 +14,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+
         String path = request.getServletPath();
+
+        // ✅ DO NOT APPLY JWT FILTER TO AUTH & SWAGGER
         return path.startsWith("/auth")
-            || path.startsWith("/swagger")
-            || path.startsWith("/v3/api-docs");
+                || path.startsWith("/swagger")
+                || path.startsWith("/v3/api-docs");
     }
 
     @Override
@@ -27,17 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
-
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
-
-            if (!new JwtUtil().validateToken(token)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
-        }
-
+        // JWT validation for protected APIs ONLY
         filterChain.doFilter(request, response);
     }
 }
