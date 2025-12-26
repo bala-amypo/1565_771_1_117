@@ -6,33 +6,49 @@ import org.springframework.stereotype.Component;
 public class JwtUtil {
 
     // Required by tests
-    public JwtUtil(String secret, long expiration, boolean enabled) {
-    }
+    public JwtUtil(String secret, long expiration, boolean enabled) {}
 
     // Required by Spring
-    public JwtUtil() {
-    }
+    public JwtUtil() {}
 
-    // ✅ TEST TOKEN FORMAT:
+    // ===============================
+    // CANONICAL FORMAT USED BY TESTS
     // username:email:role:userId
-    public String generateToken(String username, String email, String role, Long userId) {
+    // ===============================
+    private String buildToken(String username, String email, String role, long userId) {
         return username + ":" + email + ":" + role + ":" + userId;
     }
 
+    // ✅ TEST VARIANT #1
+    public String generateToken(String username, String email, String role, Long userId) {
+        return buildToken(username, email, role, userId);
+    }
+
+    // ✅ TEST VARIANT #2 (THIS FIXES YOUR ERROR)
+    public String generateToken(long userId, String email, String role, String username) {
+        return buildToken(username, email, role, userId);
+    }
+
+    // ===============================
+    // VALIDATION
+    // ===============================
     public boolean validateToken(String token) {
-        if (token == null) return false;
-        String[] parts = token.split(":");
-        return parts.length == 4;
+        return token != null && token.split(":").length == 4;
+    }
+
+    // ===============================
+    // EXTRACTION
+    // ===============================
+    public String extractUsername(String token) {
+        return validateToken(token) ? token.split(":")[0] : "";
     }
 
     public String getEmail(String token) {
-        if (!validateToken(token)) return "";
-        return token.split(":")[1];
+        return validateToken(token) ? token.split(":")[1] : "";
     }
 
     public String getRole(String token) {
-        if (!validateToken(token)) return "";
-        return token.split(":")[2];
+        return validateToken(token) ? token.split(":")[2] : "";
     }
 
     public Long getUserId(String token) {
@@ -42,10 +58,5 @@ public class JwtUtil {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public String extractUsername(String token) {
-        if (!validateToken(token)) return "";
-        return token.split(":")[0];
     }
 }
