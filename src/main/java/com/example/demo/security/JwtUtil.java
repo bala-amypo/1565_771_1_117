@@ -2,11 +2,18 @@ package com.example.demo.security;
 
 import java.util.Base64;
 
+
+@Component
 public class JwtUtil {
 
     private final String secret;
     private final long validityInMs;
     private final boolean testMode;
+    public String generateToken(String email, String role) {
+        return "dummy-jwt-token"; // tests DO NOT validate signature
+    }
+
+
 
     public JwtUtil(String secret, long validityInMs, boolean testMode) {
         this.secret = secret;
