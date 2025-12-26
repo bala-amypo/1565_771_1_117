@@ -1,34 +1,61 @@
 package com.example.demo.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
-public class SwaggerConfig {
+@EnableWebSecurity
+public class SecurityConfig {
 
     @Bean
-    public OpenAPI openAPI() {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        final String securitySchemeName = "BearerAuth";
+        http
+            .cors()   // ✅ ENABLE CORS
+            .and()
+            .csrf().disable()
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(
+                            "/auth/**",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**"
+                    ).permitAll()
+                    .anyRequest().authenticated()
+            );
 
-        return new OpenAPI()
-                .info(new Info()
-                        .title("IT Policy Master API")
-                        .version("1.0")
-                        .description("JWT secured APIs"))
-                .addSecurityItem(new SecurityRequirement()
-                        .addList(securitySchemeName))
-                .components(new Components()
-                        .addSecuritySchemes(securitySchemeName,
-                                new SecurityScheme()
-                                        .name(securitySchemeName)
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")));
+        return http.build();
+    }
+
+    // ✅ PASSWORD ENCODER
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    // ✅ GLOBAL CORS CONFIGURATION
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(false);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
     }
 }
