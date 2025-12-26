@@ -1,17 +1,19 @@
 package com.example.demo.config;
 
+import com.example.demo.security.JwtAuthenticationEntryPoint;
 import com.example.demo.security.JwtAuthenticationFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
- 
+
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
@@ -28,19 +30,14 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf.disable())
-            .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
+            .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // 🔓 NO LOCK
                 .requestMatchers(
-                        "/auth/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
+                    "/auth/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
                 ).permitAll()
-
-                // 🔒 EVERYTHING ELSE LOCKED
                 .anyRequest().authenticated()
             );
 
@@ -48,7 +45,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 🔑 REQUIRED (fix PasswordEncoder error)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
