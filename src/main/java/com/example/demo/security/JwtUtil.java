@@ -30,20 +30,13 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token) {
-        if (token == null || token.trim().isEmpty()) return false;
-        String[] parts = token.split(":");
-        return parts.length == 4;
+        return token != null && token.split(":").length >= 4;
     }
 
-    // ✅ TEST EXPECTS "" (empty string) — NOT NULL
+    // ✅ FIXED — EMAIL IS EVERYTHING BEFORE FIRST :
     public String getEmail(String token) {
         if (!validateToken(token)) return "";
-        return token.split(":")[0];
-    }
-
-    public String getRole(String token) {
-        if (!validateToken(token)) return "";
-        return token.split(":")[2];
+        return token.substring(0, token.indexOf(":"));
     }
 
     public Long getUserId(String token) {
@@ -53,6 +46,11 @@ public class JwtUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public String getRole(String token) {
+        if (!validateToken(token)) return "";
+        return token.split(":")[2];
     }
 
     public String extractUsername(String token) {
