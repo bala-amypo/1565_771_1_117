@@ -29,4 +29,17 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         v.setResolved(true);
         return repo.save(v);
     }
+    @Override
+public List<ViolationRecord> getViolationsByUser(Long userId) {
+    return repo.findAll()
+            .stream()
+            .filter(v -> v.getUserId().equals(userId))
+            .toList();
+}
+
+@Override
+public List<ViolationRecord> getAllViolations() {
+    return repo.findAll();
+}
+
 }
