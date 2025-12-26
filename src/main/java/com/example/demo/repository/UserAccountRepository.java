@@ -10,4 +10,5 @@ public interface UserAccountRepository
 
     // ✅ REQUIRED
     Optional<UserAccount> findByEmail(String email);
+    Optional<UserAccount> findByUsername(String username);
 }
