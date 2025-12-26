@@ -29,18 +29,21 @@ public class JwtUtil {
         return email + ":" + userId + ":" + role + ":" + username;
     }
 
-    // 🔴 STRICT validation required by tests
     public boolean validateToken(String token) {
-        if (token == null || token.trim().isEmpty()) {
-            return false;
-        }
+        if (token == null || token.trim().isEmpty()) return false;
         String[] parts = token.split(":");
         return parts.length == 4;
     }
 
+    // ✅ TEST EXPECTS "" (empty string) — NOT NULL
     public String getEmail(String token) {
-        if (!validateToken(token)) return null;
+        if (!validateToken(token)) return "";
         return token.split(":")[0];
+    }
+
+    public String getRole(String token) {
+        if (!validateToken(token)) return "";
+        return token.split(":")[2];
     }
 
     public Long getUserId(String token) {
@@ -52,13 +55,8 @@ public class JwtUtil {
         }
     }
 
-    public String getRole(String token) {
-        if (!validateToken(token)) return null;
-        return token.split(":")[2];
-    }
-
     public String extractUsername(String token) {
-        if (!validateToken(token)) return null;
+        if (!validateToken(token)) return "";
         return token.split(":")[3];
     }
 }
