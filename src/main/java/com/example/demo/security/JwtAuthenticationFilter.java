@@ -14,10 +14,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        return path.startsWith("/auth")
-                || path.startsWith("/swagger")
-                || path.startsWith("/v3/api-docs");
+        return request.getServletPath().startsWith("/auth")
+            || request.getServletPath().startsWith("/swagger")
+            || request.getServletPath().startsWith("/v3/api-docs");
     }
 
     @Override
@@ -27,7 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Token validation happens ONLY for protected APIs
+        // JWT validation handled here for protected APIs
+
         filterChain.doFilter(request, response);
     }
 }
