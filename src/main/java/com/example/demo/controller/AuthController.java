@@ -1,23 +1,22 @@
 package com.example.demo.controller;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.Operation;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@SecurityRequirement(name = "") // ❌ REMOVE SECURITY FROM CONTROLLER
+@SecurityRequirements  // 🔥 THIS REMOVES LOCK
 public class AuthController {
 
     @PostMapping("/register")
-    @Operation(security = {}) // 🔓 NO LOCK
-    public String register() {
-        return "REGISTER OK";
+    public String register(@RequestBody RegisterRequest request) {
+        return "User registered";
     }
 
     @PostMapping("/login")
-    @Operation(security = {}) // 🔓 NO LOCK
-    public String login() {
-        return "LOGIN OK";
+    public String login(@RequestBody LoginRequest request) {
+        return "JWT_TOKEN";
     }
 }
