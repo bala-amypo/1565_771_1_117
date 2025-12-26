@@ -5,26 +5,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    // REQUIRED by tests
+    // REQUIRED BY TEST CASES
     public JwtUtil(String secret, long expiration, boolean enabled) {
-        // values not used, but constructor must exist
     }
 
-    // REQUIRED by Spring
+    // REQUIRED BY SPRING
     public JwtUtil() {
     }
 
-    // ✅ TOKEN GENERATION
     public String generateToken(String email, Long userId, String role, String username) {
         return email + ":" + userId + ":" + role + ":" + username;
     }
 
-    // ✅ TOKEN VALIDATION
     public boolean validateToken(String token) {
         return token != null && token.split(":").length == 4;
     }
 
-    // ✅ TOKEN PARSING
     public String getEmail(String token) {
         return token.split(":")[0];
     }
