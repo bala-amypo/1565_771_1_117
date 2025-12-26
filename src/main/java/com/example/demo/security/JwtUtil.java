@@ -1,48 +1,51 @@
 package com.example.demo.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 @Component
 public class JwtUtil {
 
+    @Value("${jwt.secret:test-secret-key-12345678901234567890}")
     private String secret;
+
+    @Value("${jwt.expiration:3600000}")
     private long expiration;
-    private boolean enabled;
 
-    // ✅ REQUIRED BY TEST CASES
-    public JwtUtil(String secret, long expiration, boolean enabled) {
-        this.secret = secret;
-        this.expiration = expiration;
-        this.enabled = enabled;
+    private SecretKey key() {
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // ✅ REQUIRED BY SPRING
-    public JwtUtil() {
-        this("test-secret", 3600000, true);
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    // ✅ TESTS EXPECT THIS SIGNATURE
-    public String generateToken(String email, Long userId, String role, String username) {
-        return email + ":" + userId + ":" + role + ":" + username;
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
     }
 
     public boolean validateToken(String token) {
-        return token != null && token.split(":").length == 4;
+        return extractClaims(token).getExpiration().after(new Date());
     }
 
-    public String getEmail(String token) {
-        return token.split(":")[0];
-    }
-
-    public Long getUserId(String token) {
-        return Long.parseLong(token.split(":")[1]);
-    }
-
-    public String getRole(String token) {
-        return token.split(":")[2];
-    }
-
-    public String getUsername(String token) {
-        return token.split(":")[3];
+    private Claims extractClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
