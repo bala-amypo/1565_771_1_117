@@ -46,7 +46,7 @@ import java.time.LocalDateTime;
 public class AuthController {
 
     private final UserAccountRepository userAccountRepository;
-    // private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AuthController(UserAccountRepository userAccountRepository) {
         this.userAccountRepository = userAccountRepository;
@@ -83,9 +83,9 @@ public class AuthController {
         UserAccount user = userAccountRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-        //     throw new RuntimeException("Invalid credentials");
-        // }
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
 
         // Token format REQUIRED by your tests
         // email:userId:role:username
