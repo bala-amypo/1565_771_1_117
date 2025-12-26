@@ -6,13 +6,11 @@ import java.util.Date;
 public class JwtUtil {
 
     private final String secret;
-    private final long validityMs;
-    private final boolean testMode;
+    private final long validity;
 
-    public JwtUtil(String secret, long validityMs, boolean testMode) {
+    public JwtUtil(String secret, long validity, boolean testMode) {
         this.secret = secret;
-        this.validityMs = validityMs;
-        this.testMode = testMode;
+        this.validity = validity;
     }
 
     public String generateToken(String username, Long userId, String role) {
@@ -21,7 +19,7 @@ public class JwtUtil {
                 .claim("uid", userId)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + validityMs))
+                .setExpiration(new Date(System.currentTimeMillis() + validity))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
