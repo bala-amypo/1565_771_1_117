@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
@@ -20,17 +21,19 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
+    public UserAccount register(@RequestBody RegisterRequest request) {
+        UserAccount user = new UserAccount();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());
         return userService.createUser(user);
     }
 
     @PostMapping("/login")
     public JwtResponse login(@RequestBody LoginRequest request) {
-        UserAccount user = userService.findByUsername(request.getUsername());
 
-        if (user == null) {
-            throw new RuntimeException("Invalid credentials");
-        }
+        UserAccount user = userService.findByUsername(request.getUsername());
 
         String token = jwtUtil.generateToken(
                 user.getEmail(),
@@ -39,6 +42,6 @@ public class AuthController {
                 user.getUsername()
         );
 
-        return new JwtResponse(token, user.getId(), user.getRole(), user.getUsername());
+        return new JwtResponse(token, user.getId(), user.getEmail(), user.getRole());
     }
 }
