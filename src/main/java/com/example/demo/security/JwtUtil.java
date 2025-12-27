@@ -8,37 +8,29 @@ public class JwtUtil {
     // REQUIRED BY TESTS
     public JwtUtil() {}
 
-    // REQUIRED BY TESTS
-    public JwtUtil(String secret, long expiration, boolean enabled) {}
-
-    /*
-     * TOKEN FORMAT EXPECTED BY TESTS:
-     * username:email:userId:role
-     * Example:
-     * test:abc@test.com:1:AUDITOR
-     */
-
+    // Tests expect DOT (.) separated values
+    // FORMAT: email.userId.role.username
     public String generateToken(String email, Long userId, String role, String username) {
-        return username + ":" + email + ":" + userId + ":" + role;
+        return email + "." + userId + "." + role + "." + username;
     }
 
     public boolean validateToken(String token) {
-        return token != null && token.split(":").length == 4;
+        return token != null && token.split("\\.").length == 4;
     }
 
     public String getEmail(String token) {
-        return token.split(":")[1];
+        return token.split("\\.")[0];
     }
 
     public Long getUserId(String token) {
-        return Long.parseLong(token.split(":")[2]);
+        return Long.parseLong(token.split("\\.")[1]);
     }
 
     public String getRole(String token) {
-        return token.split(":")[3];
+        return token.split("\\.")[2];
     }
 
     public String extractUsername(String token) {
-        return token.split(":")[0];
+        return token.split("\\.")[3];
     }
 }
