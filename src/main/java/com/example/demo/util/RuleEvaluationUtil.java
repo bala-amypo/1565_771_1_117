@@ -27,7 +27,7 @@ public class RuleEvaluationUtil {
 
         for (PolicyRule rule : rules) {
 
-            // 🔥 CRITICAL FIX
+          
             if (rule.getConditionsJson() != null
                     && rule.getConditionsJson().equals(event.getLoginStatus())) {
 
