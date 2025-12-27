@@ -37,10 +37,13 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = repo.findById(id).orElseThrow();
+        UserAccount user = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         user.setStatus(status);
         return repo.save(user);
     }
+
 
     @Override
     public List<UserAccount> getAllUsers() {
