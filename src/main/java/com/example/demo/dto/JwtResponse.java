@@ -1,32 +1,11 @@
-package com.example.demo.dto;
+import com.example.demo.dto.JwtResponse;
+// ... other imports
 
-public class JwtResponse {
-
-    private String token;
-    private Long userId;
-    private String email;
-    private String role;
-
-    public JwtResponse(String token, Long userId, String email, String role) {
-        this.token = token;
-        this.userId = userId;
-        this.email = email;
-        this.role = role;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRole() {
-        return role;
-    }
+@PostMapping("/signin")
+public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    // ... logic to generate token
+    String jwt = jwtUtils.generateJwtToken(authentication);
+    
+    // This is the line that was failing because the class was missing
+    return ResponseEntity.ok(new JwtResponse(jwt));
 }
