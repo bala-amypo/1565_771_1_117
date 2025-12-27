@@ -45,7 +45,7 @@ public boolean evaluateRule(String ruleCode, Object context) {
                 violation.setDetails("Rule triggered: " + rule.getConditionsJson());
                 violation.setResolved(false);
 
-                violationRepo.save(violation); // ✅ THIS WAS MISSING
+                violationRepo.save(violation); 
             }
         }
     }
