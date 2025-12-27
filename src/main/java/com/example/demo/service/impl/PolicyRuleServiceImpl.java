@@ -16,20 +16,33 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
         this.repo = repo;
     }
 
+    @Override
     public PolicyRule createRule(PolicyRule rule) {
         return repo.save(rule);
     }
 
+    @Override
     public PolicyRule updateRule(Long id, PolicyRule rule) {
-        rule.setId(id);
-        return repo.save(rule);
+        PolicyRule existing = repo.findById(id).orElseThrow();
+        existing.setRuleCode(rule.getRuleCode());
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setActive(rule.getActive());
+        return repo.save(existing);
     }
 
+    @Override
     public List<PolicyRule> getActiveRules() {
         return repo.findByActiveTrue();
     }
 
+    @Override
     public List<PolicyRule> getAllRules() {
         return repo.findAll();
+    }
+
+    @Override
+    public PolicyRule getRuleByCode(String ruleCode) {
+        return repo.findByRuleCode(ruleCode).orElse(null);
     }
 }
