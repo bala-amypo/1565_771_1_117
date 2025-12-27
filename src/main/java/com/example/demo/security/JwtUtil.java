@@ -1,21 +1,27 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    // REQUIRED BY TESTS
-    public JwtUtil() {}
+    private String secret;
+    private long expiration;
+    private boolean enabled;
 
-    // FORMAT: email:userId:role:username
+    // ✅ REQUIRED BY TESTS (DO NOT REMOVE)
+    public JwtUtil(String secret, long expiration, boolean enabled) {
+        this.secret = secret;
+        this.expiration = expiration;
+        this.enabled = enabled;
+    }
+
+    // ✅ REQUIRED BY SPRING
+    public JwtUtil() {
+    }
+
+    // FORMAT EXPECTED BY TESTS:
+    // email:userId:role:username
     public String generateToken(String email, Long userId, String role, String username) {
         return email + ":" + userId + ":" + role + ":" + username;
     }
