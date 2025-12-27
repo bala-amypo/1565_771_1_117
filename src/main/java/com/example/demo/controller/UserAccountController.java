@@ -26,8 +26,12 @@ public class UserAccountController {
         return service.getUserById(id);
     }
 
-    @PutMapping("/{id}/status")
-    public UserAccount updateStatus(@PathVariable Long id, @RequestParam String status) {
-        return service.updateUserStatus(id, status);
+   @PutMapping("/{id}/status")
+    public ResponseEntity<UserAccount> updateStatus(
+            @PathVariable Long id,
+            @RequestParam String status
+    ) {
+        UserAccount updated = userService.updateUserStatus(id, status);
+        return ResponseEntity.ok(updated);
     }
 }
