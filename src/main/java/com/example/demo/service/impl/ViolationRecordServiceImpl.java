@@ -5,6 +5,7 @@ import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,14 +17,28 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         this.repo = repo;
     }
 
+    @Override
     public ViolationRecord logViolation(ViolationRecord violation) {
+
+        // ✅ REQUIRED BY testViolationTriggered
+        if (violation.getDetectedAt() == null) {
+            violation.setDetectedAt(LocalDateTime.now());
+        }
+
+        if (violation.getResolved() == null) {
+            violation.setResolved(false);
+        }
+
+        // 🔥 THIS SAVE IS WHAT THE TEST ASSERTS
         return repo.save(violation);
     }
 
+    @Override
     public List<ViolationRecord> getUnresolvedViolations() {
         return repo.findByResolvedFalse();
     }
 
+    @Override
     public ViolationRecord markResolved(Long id) {
         ViolationRecord v = repo.findById(id).orElseThrow();
         v.setResolved(true);
