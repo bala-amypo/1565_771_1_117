@@ -16,14 +16,14 @@ public class JwtUtil {
     private final long expiration;
     private final boolean enabled;
 
-    // ✅ Default constructor for Spring
+  
     public JwtUtil() {
         this.key = Keys.hmacShaKeyFor("default-secret-default-secret-123456".getBytes(StandardCharsets.UTF_8));
         this.expiration = 3600000;
         this.enabled = true;
     }
 
-    // ✅ Constructor used by tests
+  
     public JwtUtil(String secret, long expiration, boolean enabled) {
         if (secret == null || secret.length() < 32) {
             secret = (secret == null ? "" : secret);
