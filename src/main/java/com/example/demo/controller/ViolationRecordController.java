@@ -4,44 +4,27 @@ import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.web.bind.annotation.*;
 
-@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/violations")
-public class ViolationRecordController {
+@SecurityRequirement(name = "bearerAuth")  // 👈 THIS IS IMPORTANT
+public class ViolationController {
 
-    private final ViolationRecordService service;
-
-    public ViolationRecordController(ViolationRecordService service) {
-        this.service = service;
+    @GetMapping
+    public List<String> getAllViolations() {
+        return List.of("Violation 1", "Violation 2");
     }
 
     @PostMapping
-    public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord v) {
-        return ResponseEntity.ok(service.logViolation(v));
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ViolationRecord>> byUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(service.getViolationsByUser(userId));
+    public String createViolation() {
+        return "Violation Created";
     }
 
     @PutMapping("/{id}/resolve")
-    public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
-        return ResponseEntity.ok(service.markResolved(id));
-    }
-
-    @GetMapping("/unresolved")
-    public ResponseEntity<List<ViolationRecord>> unresolved() {
-        return ResponseEntity.ok(service.getUnresolvedViolations());
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ViolationRecord>> all() {
-        return ResponseEntity.ok(service.getAllViolations());
+    public String resolveViolation(@PathVariable Long id) {
+        return "Resolved " + id;
     }
 }
