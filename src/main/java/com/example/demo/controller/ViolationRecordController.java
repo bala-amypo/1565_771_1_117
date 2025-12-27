@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,29 +11,37 @@ import java.util.List;
 @RequestMapping("/api/violations")
 public class ViolationRecordController {
 
-    private final ViolationRecordService service;
+    private final ViolationRecordService violationService;
 
-    public ViolationRecordController(ViolationRecordService service) {
-        this.service = service;
+    public ViolationRecordController(ViolationRecordService violationService) {
+        this.violationService = violationService;
     }
 
     @PostMapping
-    public ViolationRecord log(@RequestBody ViolationRecord record) {
-        return service.logViolation(record);
+    public ResponseEntity<ViolationRecord> logViolation(
+            @RequestBody ViolationRecord violation) {
+        return ResponseEntity.ok(violationService.logViolation(violation));
     }
 
     @GetMapping("/user/{userId}")
-    public List<ViolationRecord> byUser(@PathVariable Long userId) {
-        return service.getViolationsByUser(userId);
+    public ResponseEntity<List<ViolationRecord>> getByUser(
+            @PathVariable Long userId) {
+        return ResponseEntity.ok(violationService.getViolationsByUser(userId));
+    }
+
+    @PutMapping("/{id}/resolve")
+    public ResponseEntity<ViolationRecord> resolveViolation(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(violationService.markResolved(id));
     }
 
     @GetMapping("/unresolved")
-    public List<ViolationRecord> unresolved() {
-        return service.getUnresolvedViolations();
+    public ResponseEntity<List<ViolationRecord>> getUnresolved() {
+        return ResponseEntity.ok(violationService.getUnresolvedViolations());
     }
 
     @GetMapping
-    public List<ViolationRecord> all() {
-        return service.getAllViolations();
+    public ResponseEntity<List<ViolationRecord>> getAll() {
+        return ResponseEntity.ok(violationService.getAllViolations());
     }
 }

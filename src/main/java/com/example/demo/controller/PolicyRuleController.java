@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.service.PolicyRuleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,24 +11,31 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    private final PolicyRuleService service;
+    private final PolicyRuleService policyRuleService;
 
-    public PolicyRuleController(PolicyRuleService service) {
-        this.service = service;
+    public PolicyRuleController(PolicyRuleService policyRuleService) {
+        this.policyRuleService = policyRuleService;
     }
 
     @PostMapping
-    public PolicyRule create(@RequestBody PolicyRule rule) {
-        return service.createRule(rule);
+    public ResponseEntity<PolicyRule> createRule(@RequestBody PolicyRule rule) {
+        return ResponseEntity.ok(policyRuleService.createRule(rule));
     }
 
-    @GetMapping
-    public List<PolicyRule> all() {
-        return service.getAllRules();
+    @PutMapping("/{id}")
+    public ResponseEntity<PolicyRule> updateRule(
+            @PathVariable Long id,
+            @RequestBody PolicyRule rule) {
+        return ResponseEntity.ok(policyRuleService.updateRule(id, rule));
     }
 
     @GetMapping("/active")
-    public List<PolicyRule> active() {
-        return service.getActiveRules();
+    public ResponseEntity<List<PolicyRule>> getActiveRules() {
+        return ResponseEntity.ok(policyRuleService.getActiveRules());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PolicyRule>> getAllRules() {
+        return ResponseEntity.ok(policyRuleService.getAllRules());
     }
 }
