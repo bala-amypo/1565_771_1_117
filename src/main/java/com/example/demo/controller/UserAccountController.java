@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,28 +11,32 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserAccountController {
 
-    private final UserAccountService service;
+    private final UserAccountService userAccountService;
 
-    public UserAccountController(UserAccountService service) {
-        this.service = service;
+    public UserAccountController(UserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
-    @GetMapping
-    public List<UserAccount> getAll() {
-        return service.getAllUsers();
+    @PostMapping
+    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
+        return ResponseEntity.ok(userAccountService.createUser(user));
     }
 
     @GetMapping("/{id}")
-    public UserAccount getById(@PathVariable Long id) {
-        return service.getUserById(id);
+    public ResponseEntity<UserAccount> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userAccountService.getUserById(id));
     }
 
-   @PutMapping("/{id}/status")
+    @PutMapping("/{id}/status")
     public ResponseEntity<UserAccount> updateStatus(
             @PathVariable Long id,
-            @RequestParam String status
-    ) {
-        UserAccount updated = userService.updateUserStatus(id, status);
-        return ResponseEntity.ok(updated);
+            @RequestParam String status) {
+
+        return ResponseEntity.ok(userAccountService.updateUserStatus(id, status));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserAccount>> getAllUsers() {
+        return ResponseEntity.ok(userAccountService.getAllUsers());
     }
 }
