@@ -7,7 +7,10 @@ import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.repository.ViolationRecordRepository;
 
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
 @Component
 public class RuleEvaluationUtil {
 
@@ -21,32 +24,50 @@ public class RuleEvaluationUtil {
         this.ruleRepo = ruleRepo;
         this.violationRepo = violationRepo;
     }
-    
-public boolean evaluateRule(String ruleCode, Object context) {
-        return true; // minimal logic, tests safe
-    }
 
-
-
-
-
+    /**
+     * Evaluate a login event against all active rules
+     */
     public void evaluateLoginEvent(LoginEvent event) {
 
         List<PolicyRule> rules = ruleRepo.findByActiveTrue();
 
         for (PolicyRule rule : rules) {
-
-          
-            if (rule.getConditionsJson() != null
-                    && rule.getConditionsJson().equals(event.getLoginStatus())) {
+            if (matches(rule, event)) {
 
                 ViolationRecord violation = new ViolationRecord();
+                violation.setUserId(event.getUser().getId());
+                violation.setEventId(event.getId());
                 violation.setSeverity(rule.getSeverity());
-                violation.setDetails("Rule triggered: " + rule.getConditionsJson());
+                violation.setViolationType(rule.getRuleCode());
+                violation.setDetails("Rule triggered: " + rule.getRuleCode());
+                violation.setDetectedAt(LocalDateTime.now());
                 violation.setResolved(false);
 
-                violationRepo.save(violation); 
+                violationRepo.save(violation);
             }
         }
+    }
+
+    /**
+     * Simple rule matcher (can be extended later)
+     */
+    private boolean matches(PolicyRule rule, LoginEvent event) {
+        String condition = rule.getConditionsJson();
+
+        if (condition == null) return false;
+
+        // Simple matching examples
+        if (condition.contains("FAILED") &&
+                "FAILED".equalsIgnoreCase(event.getLoginStatus())) {
+            return true;
+        }
+
+        if (condition.contains("DEVICE") &&
+                event.getDeviceId() != null) {
+            return true;
+        }
+
+        return false;
     }
 }
