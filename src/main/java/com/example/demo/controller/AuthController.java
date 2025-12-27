@@ -8,6 +8,7 @@ import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/auth")
@@ -15,10 +16,12 @@ public class AuthController {
 
     private final UserAccountService userService;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder; // 1. Add this
 
-    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
+    public AuthController(UserAccountService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ================= REGISTER =================
@@ -39,14 +42,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        // ✅ Corrected: Finding by username string, not parsing as Long
         UserAccount user = userService.findByUsername(request.getUsername());
 
-        if (user == null || !user.getPassword().equals(request.getPassword())) {
+        // 2. Use passwordEncoder.matches(plainText, hashed)
+        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
 
-        // 🔹 JWT creation
+        // ... rest of your JWT generation code
         String token = jwtUtil.generateToken(
                 user.getEmail(),
                 user.getId(),
@@ -54,13 +57,6 @@ public class AuthController {
                 user.getUsername()
         );
 
-        return ResponseEntity.ok(
-                new JwtResponse(
-                        token,
-                        user.getId(),
-                        user.getRole(),
-                        user.getUsername()
-                )
-        );
+        return ResponseEntity.ok(new JwtResponse(token, user.getId(), user.getRole(), user.getUsername()));
     }
 }
