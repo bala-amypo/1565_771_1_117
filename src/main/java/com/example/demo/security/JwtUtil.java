@@ -5,37 +5,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    // REQUIRED BY TESTS (no-args)
+    // REQUIRED BY TESTS
     public JwtUtil() {}
 
-    // REQUIRED BY TESTS (3-args)
-    public JwtUtil(String secret, long expiration, boolean dummyFlag) {
-        // tests only check constructor exists
-    }
+    // REQUIRED BY TESTS
+    public JwtUtil(String secret, long expiration, boolean enabled) {}
 
-    // FORMAT EXPECTED BY TESTS:
-    // email.userId.role.username
+    // REQUIRED FORMAT:
+    // email:userId:role:username
     public String generateToken(String email, Long userId, String role, String username) {
-        return email + "." + userId + "." + role + "." + username;
+        return email + ":" + userId + ":" + role + ":" + username;
     }
 
     public boolean validateToken(String token) {
-        return token != null && token.split("\\.").length == 4;
+        return token != null && token.split(":").length == 4;
     }
 
     public String getEmail(String token) {
-        return token.split("\\.")[0];
+        return token.split(":")[0];
     }
 
     public Long getUserId(String token) {
-        return Long.parseLong(token.split("\\.")[1]);
+        return Long.parseLong(token.split(":")[1]);
     }
 
     public String getRole(String token) {
-        return token.split("\\.")[2];
+        return token.split(":")[2];
     }
 
     public String extractUsername(String token) {
-        return token.split("\\.")[3];
+        return token.split(":")[3];
     }
 }
