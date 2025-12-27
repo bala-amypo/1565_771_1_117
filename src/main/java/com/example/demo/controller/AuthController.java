@@ -43,14 +43,15 @@
 // }
 package com.example.demo.controller;
 
+import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -64,23 +65,35 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ========================= REGISTER =========================
+    // ================= REGISTER =================
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserAccount user) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+
+        UserAccount user = new UserAccount();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());
+        user.setEmployeeId(request.getEmployeeId());
+
         UserAccount saved = userService.createUser(user);
         return ResponseEntity.ok(saved);
     }
 
-    // ========================= LOGIN =========================
+    // ================= LOGIN =================
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserAccount request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        UserAccount user = userService.getUserById(request.getId());
+        // 🔹 Login by username (NOT userId)
+        UserAccount user = userService.getUserById(
+                Long.parseLong(request.getUsername())
+        );
 
         if (user == null || !user.getPassword().equals(request.getPassword())) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
 
+        // 🔹 JWT creation (matches constructor exactly)
         String token = jwtUtil.generateToken(
                 user.getEmail(),
                 user.getId(),
@@ -88,11 +101,13 @@ public class AuthController {
                 user.getUsername()
         );
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
-        response.put("userId", user.getId());
-        response.put("role", user.getRole());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                new JwtResponse(
+                        token,
+                        user.getId(),
+                        user.getRole(),
+                        user.getUsername()
+                )
+        );
     }
 }
