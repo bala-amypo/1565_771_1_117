@@ -58,56 +58,55 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserAccountService userService;
-    private final JwtUtil jwtUtil;
+        private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
-    }
+            public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
+                    this.userService = userService;
+                            this.jwtUtil = jwtUtil;
+                                }
 
-    // ================= REGISTER =================
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+                                    // ================= REGISTER =================
+                                        @PostMapping("/register")
+                                            public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
-        UserAccount user = new UserAccount();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole(request.getRole());
-        user.setEmployeeId(request.getEmployeeId());
+                                                    UserAccount user = new UserAccount();
+                                                            user.setUsername(request.getUsername());
+                                                                    user.setEmail(request.getEmail());
+                                                                            user.setPassword(request.getPassword());
+                                                                                    user.setRole(request.getRole());
+                                                                                            user.setEmployeeId(request.getEmployeeId());
 
-        UserAccount saved = userService.createUser(user);
-        return ResponseEntity.ok(saved);
-    }
+                                                                                                    UserAccount saved = userService.createUser(user);
+                                                                                                            return ResponseEntity.ok(saved);
+                                                                                                                }
 
-    // ================= LOGIN =================
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+                                                                                                                    // ================= LOGIN =================
+                                                                                                                        @PostMapping("/login")
+                                                                                                                            public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        // 🔹 Login by username (NOT userId)
-        UserAccount user = userService.getUserById(
-                Long.parseLong(request.getUsername())
-        );
+                                                                                                                                    // 🔹 Login by username (NOT userId)
+                                                                                                                                            UserAccount user = userService.getUserById(
+                                                                                                                                                            Long.parseLong(request.getUsername())
+                                                                                                                                                                    );
 
-        if (user == null || !user.getPassword().equals(request.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+                                                                                                                                                                            if (user == null || !user.getPassword().equals(request.getPassword())) {
+                                                                                                                                                                                        return ResponseEntity.status(401).body("Invalid credentials");
+                                                                                                                                                                                                }
 
-        // 🔹 JWT creation (matches constructor exactly)
-        String token = jwtUtil.generateToken(
-                user.getEmail(),
-                user.getId(),
-                user.getRole(),
-                user.getUsername()
-        );
+                                                                                                                                                                                                        // 🔹 JWT creation (matches constructor exactly)
+                                                                                                                                                                                                                String token = jwtUtil.generateToken(
+                                                                                                                                                                                                                                user.getEmail(),
+                                                                                                                                                                                                                                                user.getId(),
+                                                                                                                                                                                                                                                                user.getRole(),
+                                                                                                                                                                                                                                                                                user.getUsername()
+                                                                                                                                                                                                                                                                                        );
 
-        return ResponseEntity.ok(
-                new JwtResponse(
-                        token,
-                        user.getId(),
-                        user.getRole(),
-                        user.getUsername()
-                )
-        );
-    }
-}
+                                                                                                                                                                                                                                                                                                return ResponseEntity.ok(
+                                                                                                                                                                                                                                                                                                                new JwtResponse(
+                                                                                                                                                                                                                                                                                                                                        token,
+                                                                                                                                                                                                                                                                                                                                                                user.getId(),
+                                                                                                                                                                                                                                                                                                                                                                                        user.getRole(),
+                                                                                                                                                                                                                                                                                                                                                                                                                user.getUsername()
+                                                                                                                                                                                                                                                                                                                                                                                                                                )
+                                                                                                                                                                                                                                                                                                                                                                                                                                        );
+                                                                                                                                                                                                                                                                                                                                                                                                                                            }
