@@ -24,47 +24,34 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ================= REGISTER =================
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        UserAccount user = new UserAccount();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // Encrypt during registration
-        user.setRole(request.getRole());
-        user.setEmployeeId(request.getEmployeeId());
+   @PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        UserAccount saved = userService.createUser(user);
-        return ResponseEntity.ok(saved);
+    UserAccount user = userService.findByUsername(request.getUsername());
+
+    if (user == null) {
+        return ResponseEntity.status(401).body("Invalid credentials");
     }
 
-    // ================= LOGIN =================
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        // 1. Find user by username string
-        UserAccount user = userService.findByUsername(request.getUsername());
-
-        // 2. Validate user existence and check hashed password
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
-
-        // 3. Generate the token
-        String token = jwtUtil.generateToken(
-                user.getEmail(),
-                user.getId(),
-                user.getRole(),
-                user.getUsername()
-        );
-
-        // 4. Return response with CORRECT field order
-        return ResponseEntity.ok(
-                new JwtResponse(
-                        token,
-                        user.getId(),
-                        user.getEmail(), // Email is 3rd parameter
-                        user.getRole()    // Role is 4th parameter
-                )
-        );
+    // ✅ CORRECT PASSWORD CHECK
+    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        return ResponseEntity.status(401).body("Invalid credentials");
     }
-} // <--- This was likely the missing brace causing your error
+
+    String token = jwtUtil.generateToken(
+            user.getEmail(),
+            user.getId(),
+            user.getRole(),
+            user.getUsername()
+    );
+
+    JwtResponse response = new JwtResponse(
+            token,
+            user.getId(),
+            user.getRole(),
+            user.getUsername()
+    );
+
+    return ResponseEntity.ok(response);
+}
+}
