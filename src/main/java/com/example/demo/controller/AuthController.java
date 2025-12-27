@@ -43,33 +43,56 @@
 // }
 package com.example.demo.controller;
 
-import com.example.demo.dto.*;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserAccountService service;
+    private final UserAccountService userService;
     private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService service, JwtUtil jwtUtil) {
-        this.service = service;
+    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
+        this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
 
+    // ========================= REGISTER =========================
     @PostMapping("/register")
-    public UserAccount register(@RequestBody RegisterRequest request) {
-        return service.createUser(request);
+    public ResponseEntity<?> register(@RequestBody UserAccount user) {
+        UserAccount saved = userService.createUser(user);
+        return ResponseEntity.ok(saved);
     }
 
+    // ========================= LOGIN =========================
     @PostMapping("/login")
-    public JwtResponse login(@RequestBody LoginRequest request) {
-        UserAccount user = service.authenticate(request);
-        String token = jwtUtil.generateToken(user.getUsername());
-        return new JwtResponse(token);
+    public ResponseEntity<?> login(@RequestBody UserAccount request) {
+
+        UserAccount user = userService.getUserById(request.getId());
+
+        if (user == null || !user.getPassword().equals(request.getPassword())) {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
+
+        String token = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getId(),
+                user.getRole(),
+                user.getUsername()
+        );
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", user.getId());
+        response.put("role", user.getRole());
+
+        return ResponseEntity.ok(response);
     }
 }
