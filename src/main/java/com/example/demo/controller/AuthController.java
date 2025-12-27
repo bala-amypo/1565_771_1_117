@@ -41,3 +41,35 @@
 //         return new JwtResponse(token, saved.getId(), saved.getEmail(), saved.getRole());
 //     }
 // }
+package com.example.demo.controller;
+
+import com.example.demo.dto.*;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.security.JwtUtil;
+import com.example.demo.service.UserAccountService;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final UserAccountService service;
+    private final JwtUtil jwtUtil;
+
+    public AuthController(UserAccountService service, JwtUtil jwtUtil) {
+        this.service = service;
+        this.jwtUtil = jwtUtil;
+    }
+
+    @PostMapping("/register")
+    public UserAccount register(@RequestBody RegisterRequest request) {
+        return service.createUser(request);
+    }
+
+    @PostMapping("/login")
+    public JwtResponse login(@RequestBody LoginRequest request) {
+        UserAccount user = service.authenticate(request);
+        String token = jwtUtil.generateToken(user.getUsername());
+        return new JwtResponse(token);
+    }
+}
