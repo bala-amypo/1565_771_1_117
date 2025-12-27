@@ -69,25 +69,23 @@ public class AuthController {
                                         @PostMapping("/register")
                                             public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
-                                                    UserAccount user = new UserAccount();
-                                                            user.setUsername(request.getUsername());
-                                                                    user.setEmail(request.getEmail());
-                                                                            user.setPassword(request.getPassword());
-                                                                                    user.setRole(request.getRole());
-                                                                                            user.setEmployeeId(request.getEmployeeId());
+                                            UserAccount user = new UserAccount();
+                                            user.setUsername(request.getUsername());
+                                            user.setEmail(request.getEmail());
+                                            user.setPassword(request.getPassword());
+                                            user.setRole(request.getRole());
+                                           user.setEmployeeId(request.getEmployeeId());
 
-                                                                                                    UserAccount saved = userService.createUser(user);
-                                                                                                            return ResponseEntity.ok(saved);
-                                                                                                                }
+                                            UserAccount saved = userService.createUser(user);
+                                            return ResponseEntity.ok(saved);
+                                         }
 
                                                                                                                     // ================= LOGIN =================
                                                                                                                         @PostMapping("/login")
                                                                                                                             public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
                                                                                                                                     // 🔹 Login by username (NOT userId)
-                                                                                                                                            UserAccount user = userService.getUserById(
-                                                                                                                                                            Long.parseLong(request.getUsername())
-                                                                                                                                                                    );
+                                                                                                                                           UserAccount user = userService.findByUsername(request.getUsername());
 
                                                                                                                                                                             if (user == null || !user.getPassword().equals(request.getPassword())) {
                                                                                                                                                                                         return ResponseEntity.status(401).body("Invalid credentials");
