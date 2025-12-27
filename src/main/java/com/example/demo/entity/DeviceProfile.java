@@ -18,8 +18,6 @@ public class DeviceProfile {
     private Boolean isTrusted;
     private LocalDateTime lastSeen;
 
-    public DeviceProfile() {}
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

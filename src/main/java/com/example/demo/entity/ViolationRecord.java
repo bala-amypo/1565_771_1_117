@@ -12,27 +12,17 @@ public class ViolationRecord {
     private Long id;
 
     private Long userId;
-    private Long policyRuleId;
     private Long eventId;
-
     private String violationType;
     private String details;
     private String severity;
-
+    private Boolean resolved;
     private LocalDateTime detectedAt;
 
-    private Boolean resolved;
-
-    public ViolationRecord() {}
-
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
-
-    public Long getPolicyRuleId() { return policyRuleId; }
-    public void setPolicyRuleId(Long policyRuleId) { this.policyRuleId = policyRuleId; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
@@ -46,9 +36,9 @@ public class ViolationRecord {
     public String getSeverity() { return severity; }
     public void setSeverity(String severity) { this.severity = severity; }
 
-    public LocalDateTime getDetectedAt() { return detectedAt; }
-    public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
-
     public Boolean getResolved() { return resolved; }
     public void setResolved(Boolean resolved) { this.resolved = resolved; }
+
+    public LocalDateTime getDetectedAt() { return detectedAt; }
+    public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
 }

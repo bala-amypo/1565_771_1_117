@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "user_account")
@@ -11,42 +12,21 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String employeeId;
-
-    @Column(unique = true, nullable = false)
     private String username;
-
-    @Column(unique = true, nullable = false)
     private String email;
-
-    @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false)
     private String role;
-
-    @Column(nullable = false)
     private String status;
-
-    @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<LoginEvent> loginEvents;
 
     public UserAccount() {}
 
-    public UserAccount(String employeeId, String username, String email,
-                       String password, String role, String status) {
-        this.employeeId = employeeId;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.status = status;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    // Getters & Setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getEmployeeId() { return employeeId; }
     public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
@@ -67,4 +47,8 @@ public class UserAccount {
     public void setStatus(String status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public List<LoginEvent> getLoginEvents() { return loginEvents; }
+    public void setLoginEvents(List<LoginEvent> loginEvents) { this.loginEvents = loginEvents; }
 }

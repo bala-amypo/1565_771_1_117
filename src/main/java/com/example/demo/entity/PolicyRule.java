@@ -16,10 +16,7 @@ public class PolicyRule {
     private String conditionsJson;
     private Boolean active;
 
-    public PolicyRule() {}
-
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getRuleCode() { return ruleCode; }
     public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
