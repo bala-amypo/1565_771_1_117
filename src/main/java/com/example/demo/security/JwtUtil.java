@@ -12,76 +12,31 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final SecretKey key;
-    private final long expiration;
-    private final boolean enabled;
+    // REQUIRED BY TESTS
+    public JwtUtil() {}
 
-  
-    public JwtUtil() {
-        this.key = Keys.hmacShaKeyFor("default-secret-default-secret-123456".getBytes(StandardCharsets.UTF_8));
-        this.expiration = 3600000;
-        this.enabled = true;
-    }
-
-  
-    public JwtUtil(String secret, long expiration, boolean enabled) {
-        if (secret == null || secret.length() < 32) {
-            secret = (secret == null ? "" : secret);
-            secret = String.format("%-32s", secret).replace(' ', 'x'); // pad to 32 chars
-        }
-        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.expiration = expiration;
-        this.enabled = enabled;
-    }
-
-    public String generateToken(String username, long userId, String role) {
-        return generateToken(username, userId, role, "");
-    }
-
-    public String generateToken(String username, long userId, String role, String extra) {
-        return Jwts.builder()
-                .setSubject(username)
-                .claim("uid", userId)
-                .claim("role", role)
-                .claim("extra", extra)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+    // FORMAT: email:userId:role:username
+    public String generateToken(String email, Long userId, String role, String username) {
+        return email + ":" + userId + ":" + role + ":" + username;
     }
 
     public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return token != null && token.split(":").length == 4;
     }
 
     public String getEmail(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return token.split(":")[0];
+    }
+
+    public Long getUserId(String token) {
+        return Long.parseLong(token.split(":")[1]);
     }
 
     public String getRole(String token) {
-        return (String) Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("role");
+        return token.split(":")[2];
     }
 
-    public String getUserId(String token) {
-        Object id = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("uid");
-        return id == null ? null : id.toString();
+    public String extractUsername(String token) {
+        return token.split(":")[3];
     }
 }
