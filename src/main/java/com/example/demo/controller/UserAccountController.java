@@ -2,14 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
-@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/users")
 public class UserAccountController {
@@ -20,25 +16,18 @@ public class UserAccountController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<UserAccount> create(@RequestBody UserAccount u) {
-        return ResponseEntity.ok(service.createUser(u));
+    @GetMapping
+    public List<UserAccount> getAll() {
+        return service.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserAccount> get(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getUserById(id));
+    public UserAccount getById(@PathVariable Long id) {
+        return service.getUserById(id);
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<UserAccount> updateStatus(
-            @PathVariable Long id,
-            @RequestParam String status) {
-        return ResponseEntity.ok(service.updateUserStatus(id, status));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<UserAccount>> all() {
-        return ResponseEntity.ok(service.getAllUsers());
+    public UserAccount updateStatus(@PathVariable Long id, @RequestParam String status) {
+        return service.updateUserStatus(id, status);
     }
 }
