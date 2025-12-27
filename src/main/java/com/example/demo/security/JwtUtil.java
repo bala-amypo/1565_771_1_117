@@ -6,18 +6,16 @@ public class JwtUtil {
     private long expiry;
     private boolean enabled;
 
-    // Default constructor (required)
+    
     public JwtUtil() {
     }
 
-    // Constructor used in test suite
     public JwtUtil(String secret, long expiry, boolean enabled) {
         this.secret = secret;
         this.expiry = expiry;
         this.enabled = enabled;
     }
 
-    // Token format: username:userId:email:role
     public String generateToken(String username, Long userId, String email, String role) {
         return username + ":" + userId + ":" + email + ":" + role;
     }
