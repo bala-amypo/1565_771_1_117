@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.JwtResponse;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.*;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -14,44 +13,48 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserAccountService userService;
-    private final JwtUtil jwtUtil;
+    private final UserAccountService service;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
+    public AuthController(UserAccountService service,
+                          PasswordEncoder passwordEncoder,
+                          JwtUtil jwtUtil) {
+        this.service = service;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
-   @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
-    UserAccount user = userService.findByUsername(request.getUsername());
+        UserAccount user = new UserAccount();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(request.getRole());
 
-    if (user == null) {
-        return ResponseEntity.status(401).body("Invalid credentials");
+        return ResponseEntity.ok(service.createUser(user));
     }
 
-    // ✅ CORRECT PASSWORD CHECK
-    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-        return ResponseEntity.status(401).body("Invalid credentials");
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+
+        UserAccount user = service.getUserByUsername(request.getUsername());
+
+        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
+
+        String token = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getId(),
+                user.getRole(),
+                user.getUsername()
+        );
+
+        return ResponseEntity.ok(
+                new JwtResponse(token, user.getId(), user.getRole(), user.getUsername())
+        );
     }
-
-    String token = jwtUtil.generateToken(
-            user.getEmail(),
-            user.getId(),
-            user.getRole(),
-            user.getUsername()
-    );
-
-    JwtResponse response = new JwtResponse(
-            token,
-            user.getId(),
-            user.getRole(),
-            user.getUsername()
-    );
-
-    return ResponseEntity.ok(response);
-}
 }
