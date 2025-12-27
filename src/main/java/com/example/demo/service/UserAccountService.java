@@ -8,7 +8,5 @@ public interface UserAccountService {
     UserAccount getUserById(Long id);
     UserAccount updateUserStatus(Long id, String status);
     List<UserAccount> getAllUsers();
-    public UserAccount findByUsername(String username) {
-    return userRepository.findByUsername(username).orElse(null);
-}
+    UserAccount findByUsername(String username);
 }

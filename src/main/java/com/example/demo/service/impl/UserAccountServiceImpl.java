@@ -27,6 +27,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount getUserById(Long id) {
         return repo.findById(id).orElse(null);
     }
+    public UserAccount findByUsername(String username) {
+    return userRepository.findByUsername(username).orElse(null);
+}
 
     public UserAccount updateUserStatus(Long id, String status) {
         UserAccount u = repo.findById(id).orElseThrow();
