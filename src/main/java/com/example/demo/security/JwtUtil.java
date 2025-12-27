@@ -5,11 +5,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    // REQUIRED BY TESTS
-    public JwtUtil() {}
+    // // REQUIRED BY TESTS
+    // public JwtUtil() {}
 
-    // REQUIRED BY TESTS
-    public JwtUtil(String secret, long expiration, boolean enabled) {}
+    // // REQUIRED BY TESTS
+    // public JwtUtil(String secret, long expiration, boolean enabled) {}
+    // REQUIRED by tests
+    public JwtUtil() {
+        this.secret = "";
+        this.expiry = 0;
+        this.enabled = false;
+    }
+
+    // REQUIRED constructor used in tests
+    public JwtUtil(String secret, long expiry, boolean enabled) {
+        this.secret = secret;
+        this.expiry = expiry;
+        this.enabled = enabled;
+    }
 
     // REQUIRED FORMAT:
     // email:userId:role:username
