@@ -10,7 +10,8 @@ import com.example.demo.service.UserAccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
+ import io.swagger.v3.oas.annotations.security.SecurityRequirement;      
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
