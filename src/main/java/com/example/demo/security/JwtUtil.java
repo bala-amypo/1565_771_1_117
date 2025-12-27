@@ -100,12 +100,14 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    // Helper to generate the signing key from your secret string
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // ✅ Generate Token with custom claims for id, email, and role
+    /**
+     * Generates a secure JWT with custom claims.
+     * Matches the signature: (String email, Long userId, String role, String username)
+     */
     public String generateToken(String email, Long userId, String role, String username) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
@@ -114,34 +116,34 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username) // The main "subject" is the username
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // ✅ Validate the token and ensure it's not expired
+    private SecretKey getSignKey() {
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token);
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    // Helper to extract specific data if needed later
-    public String getEmail(String token) {
-        return extractAllClaims(token).get("email", String.class);
-    }
-
-    private Claims extractAllClaims(String token) {
+    // Example helper to extract claims if needed for filters
+    public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
