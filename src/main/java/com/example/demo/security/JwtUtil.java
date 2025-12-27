@@ -2,26 +2,22 @@ package com.example.demo.security;
 
 public class JwtUtil {
 
-    // ✅ DECLARE FIELDS (THIS FIXES THE COMPILATION ERROR)
     private String secret;
     private long expiry;
     private boolean enabled;
 
-    // ✅ REQUIRED DEFAULT CONSTRUCTOR
+    // Default constructor (required)
     public JwtUtil() {
     }
 
-    // ✅ REQUIRED BY TEST SUITE
+    // Constructor used in test suite
     public JwtUtil(String secret, long expiry, boolean enabled) {
         this.secret = secret;
         this.expiry = expiry;
         this.enabled = enabled;
     }
 
-    /*
-     * Token structure expected by tests:
-     * username:userId:email:role
-     */
+    // Token format: username:userId:email:role
     public String generateToken(String username, Long userId, String email, String role) {
         return username + ":" + userId + ":" + email + ":" + role;
     }
