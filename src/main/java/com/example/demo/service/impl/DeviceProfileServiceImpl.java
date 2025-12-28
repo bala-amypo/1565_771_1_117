@@ -3,43 +3,43 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository repo;
+    private final DeviceProfileRepository repository;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
-        this.repo = repo;
+    public DeviceProfileServiceImpl(DeviceProfileRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
-        return repo.save(device);
+        device.setLastSeen(LocalDateTime.now());
+        return repository.save(device);
     }
 
     @Override
     public DeviceProfile updateTrustStatus(Long id, boolean trusted) {
-        DeviceProfile device = repo.findById(id)
+        DeviceProfile device = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
-        device.setTrusted(trusted);
-        return repo.save(device);
+        device.setIsTrusted(trusted);
+        return repository.save(device);
     }
 
     @Override
     public List<DeviceProfile> getDevicesByUser(Long userId) {
-        return repo.findByUserId(userId);
+        return repository.findByUserId(userId);
     }
 
     @Override
     public Optional<DeviceProfile> findByDeviceId(String deviceId) {
-        return repo.findByDeviceId(deviceId);
+        return repository.findByDeviceId(deviceId);
     }
 }
 
