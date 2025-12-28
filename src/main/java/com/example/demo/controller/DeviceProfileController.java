@@ -24,10 +24,11 @@ public class DeviceProfileController {
         return ResponseEntity.ok(service.registerDevice(device));
     }
 
-    @PutMapping("/{id}/trust")
-    public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
-        return ResponseEntity.ok(service.updateTrustStatus(id, false));
-    }
+   @PutMapping("/{id}/trust")
+public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
+    // Calling service with 'true' to actually trust the device
+    return ResponseEntity.ok(service.updateTrustStatus(id, true)); 
+}
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<DeviceProfile>> getByUser(@PathVariable Long userId) {
