@@ -32,12 +32,10 @@ public class DeviceProfile {
         this.lastSeen = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public void setUserId(Long userId) { this.userId = userId; }
     public Long getUserId() { return userId; }
-    // public void setUser(UserAccount user) { this.user = user; }
     public String getDeviceId() { return deviceId; }
     public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
     public String getDeviceType() { return deviceType; }

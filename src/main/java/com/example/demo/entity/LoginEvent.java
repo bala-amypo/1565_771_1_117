@@ -11,7 +11,6 @@ public class LoginEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Change: Replaced UserAccount object with Long userId
     @Column(name = "user_id")
     private Long userId;
 
