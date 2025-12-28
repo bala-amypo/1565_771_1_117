@@ -46,7 +46,7 @@
 //         return repo.findByRuleCode(ruleCode).orElse(null);
 //     }
 //}
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.repository.PolicyRuleRepository;
@@ -58,32 +58,43 @@ import java.util.List;
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository repo;
+    private final PolicyRuleRepository ruleRepo;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository repo) {
-        this.repo = repo;
+    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
+        this.ruleRepo = ruleRepo;
     }
 
+    @Override
     public PolicyRule createRule(PolicyRule rule) {
-        return repo.save(rule);
+        return ruleRepo.save(rule);
     }
 
+    @Override
     public PolicyRule updateRule(Long id, PolicyRule rule) {
-        rule.setId(id);
-        return repo.save(rule);
+        PolicyRule existing = ruleRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found with ID: " + id));
+
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setConditionsJson(rule.getConditionsJson());
+        existing.setActive(rule.getActive());
+
+        return ruleRepo.save(existing);
     }
 
+    @Override
+    public PolicyRule getRuleByCode(String code) {
+        return ruleRepo.findByRuleCode(code)
+                .orElseThrow(() -> new RuntimeException("Rule not found with code: " + code));
+    }
+
+    @Override
     public List<PolicyRule> getActiveRules() {
-        return repo.findByActiveTrue();
+        return ruleRepo.findByActiveTrue();
     }
 
+    @Override
     public List<PolicyRule> getAllRules() {
-        return repo.findAll();
+        return ruleRepo.findAll();
     }
-
-    public PolicyRule getRuleByCode(String ruleCode){
-    return repo.findByRuleCode(ruleCode);
-    }
-
 }
-
