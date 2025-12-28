@@ -37,45 +37,45 @@
 // // //         return token.split(":")[3];
 // // //     }
 // // // }
-// // package com.example.demo.security;
+package com.example.demo.security;
 
-// // import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;
 
-// // @Component   // ✅ THIS WAS MISSING
-// // public class JwtUtil {
+@Component   // ✅ THIS WAS MISSING
+public class JwtUtil {
 
-// //     // ===== REQUIRED BY TESTS =====
-// //     public JwtUtil() {}
+    // ===== REQUIRED BY TESTS =====
+    public JwtUtil() {}
 
-// //     public JwtUtil(String secret, long expiration, boolean enabled) {}
+    public JwtUtil(String secret, long expiration, boolean enabled) {}
 
-// //     // ===== TOKEN FORMAT =====
-// //     // email:userId:role:username
+    // ===== TOKEN FORMAT =====
+    // email:userId:role:username
 
-// //     public String generateToken(String email, Long userId, String role, String username) {
-// //         return email + ":" + userId + ":" + role + ":" + username;
-// //     }
+    public String generateToken(String email, Long userId, String role, String username) {
+        return email + ":" + userId + ":" + role + ":" + username;
+    }
 
-// //     public boolean validateToken(String token) {
-// //         return token != null && token.split(":").length == 4;
-// //     }
+    public boolean validateToken(String token) {
+        return token != null && token.split(":").length == 4;
+    }
 
-// //     public String getEmail(String token) {
-// //         return token.split(":")[0];
-// //     }
+    public String getEmail(String token) {
+        return token.split(":")[0];
+    }
 
-// //     public Long getUserId(String token) {
-// //         return Long.parseLong(token.split(":")[1]);
-// //     }
+    public Long getUserId(String token) {
+        return Long.parseLong(token.split(":")[1]);
+    }
 
-// //     public String getRole(String token) {
-// //         return token.split(":")[2];
-// //     }
+    public String getRole(String token) {
+        return token.split(":")[2];
+    }
 
-// //     public String getUsername(String token) {
-// //         return token.split(":")[3];
-// //     }
-// // // }
+    public String getUsername(String token) {
+        return token.split(":")[3];
+    }
+}
 // // package com.example.demo.security;
 
 // // import io.jsonwebtoken.Claims;
@@ -264,75 +264,75 @@
 //     }
 // }
 
-package com.example.demo.security;
-import com.example.demo.entity.UserAccount;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.Map;
+// package com.example.demo.security;
+// import com.example.demo.entity.UserAccount;
+// import io.jsonwebtoken.*;
+// import io.jsonwebtoken.security.Keys;
+// import javax.crypto.SecretKey;
+// import java.util.Date;
+// import java.util.Map;
 
-public class JwtUtil {
+// public class JwtUtil {
 
-    private SecretKey key;
-    private long expiration;
+//     private SecretKey key;
+//     private long expiration;
 
-    public JwtUtil(String secret, Long expiration) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expiration = (expiration != null ? expiration : 3600000L);
-    }
+//     public JwtUtil(String secret, Long expiration) {
+//         this.key = Keys.hmacShaKeyFor(secret.getBytes());
+//         this.expiration = (expiration != null ? expiration : 3600000L);
+//     }
 
-    public JwtUtil() {
-        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        this.expiration = 3600000;
-    }
+//     public JwtUtil() {
+//         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//         this.expiration = 3600000;
+//     }
 
-    public void initKey() {
-        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    }
+//     public void initKey() {
+//         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//     }
 
-    public String generateToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .signWith(key)
-                .compact();
-    }
+//     public String generateToken(Map<String, Object> claims, String subject) {
+//         return Jwts.builder()
+//                 .setClaims(claims)
+//                 .setSubject(subject)
+//                 .setIssuedAt(new Date())
+//                 .signWith(key)
+//                 .compact();
+//     }
 
-    public String generateTokenForUser(com.example.demo.entity.UserAccount user) {
-        Map<String, Object> claims = Map.of(
-                "userId", user.getId(),
-                "email", user.getEmail(),
-                "role", user.getRole()
-        );
-        return generateToken(claims, user.getEmail());
-    }
+//     public String generateTokenForUser(com.example.demo.entity.UserAccount user) {
+//         Map<String, Object> claims = Map.of(
+//                 "userId", user.getId(),
+//                 "email", user.getEmail(),
+//                 "role", user.getRole()
+//         );
+//         return generateToken(claims, user.getEmail());
+//     }
 
-    public Jws<Claims> parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token);
-    }
+//     public Jws<Claims> parseToken(String token) {
+//         return Jwts.parserBuilder()
+//                 .setSigningKey(key)
+//                 .build()
+//                 .parseClaimsJws(token);
+//     }
 
-    public Jws<Claims> getPayload(String token) {
-        return parseToken(token);
-    }
+//     public Jws<Claims> getPayload(String token) {
+//         return parseToken(token);
+//     }
 
-    public String extractUsername(String token) {
-        return parseToken(token).getPayload().getSubject();
-    }
+//     public String extractUsername(String token) {
+//         return parseToken(token).getPayload().getSubject();
+//     }
 
-    public Long extractUserId(String token) {
-        return Long.valueOf(parseToken(token).getPayload().get("userId").toString());
-    }
+//     public Long extractUserId(String token) {
+//         return Long.valueOf(parseToken(token).getPayload().get("userId").toString());
+//     }
 
-    public String extractRole(String token) {
-        return (String) parseToken(token).getPayload().get("role");
-    }
+//     public String extractRole(String token) {
+//         return (String) parseToken(token).getPayload().get("role");
+//     }
 
-    public boolean isTokenValid(String token, String username) {
-        return extractUsername(token).equals(username);
-    }
-}
+//     public boolean isTokenValid(String token, String username) {
+//         return extractUsername(token).equals(username);
+//     }
+// }
