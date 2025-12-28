@@ -70,7 +70,7 @@ public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
     public UserAccount getUser() { return user; }
     public void setUser(UserAccount user) {
         this.user = user;
-        this.userId = (user != null ? user.getId() : null); // keep both in sync
+        this.violationUserId = (user != null ? user.getId() : null); // keep both in sync
     }
 
 
