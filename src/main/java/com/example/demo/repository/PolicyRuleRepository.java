@@ -12,6 +12,8 @@
 
 //     Optional<PolicyRule> findByRuleCode(String ruleCode);
 // }
+
+//}
 package com.example.demo.repository;
 
 import com.example.demo.entity.PolicyRule;
@@ -23,6 +25,3 @@ import java.util.Optional;
 public interface PolicyRuleRepository extends JpaRepository<PolicyRule, Long> {
 
     List<PolicyRule> findByActiveTrue();
-
-    PolicyRule findByRuleCode(String ruleCode);
-}
