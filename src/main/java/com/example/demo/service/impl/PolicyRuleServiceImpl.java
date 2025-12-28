@@ -24,7 +24,7 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     @Override
     public PolicyRule updateRule(Long id, PolicyRule rule) {
         PolicyRule existing = ruleRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Policy rule not found"));
+                .orElseThrow(() -> new RuntimeException("PolicyRule not found"));
 
         existing.setRuleCode(rule.getRuleCode());
         existing.setDescription(rule.getDescription());
@@ -32,11 +32,6 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
         existing.setActive(rule.getActive());
 
         return ruleRepo.save(existing);
-    }
-
-    @Override
-    public List<PolicyRule> getActiveRules() {
-        return ruleRepo.findByActiveTrue();
     }
 
     @Override
@@ -50,7 +45,6 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
         return ruleRepo.findAll();
     }
 }
-
 
 
 // package com.example.demo.service.impl;

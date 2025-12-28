@@ -36,6 +36,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount updateUserStatus(Long id, String status) {
         UserAccount user = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         user.setStatus(status);
         return userRepo.save(user);
     }
