@@ -12,8 +12,9 @@ public class LoginEvent {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserAccount user;
+@JoinColumn(name = "user_id")
+@JsonIgnore // This prevents the parser from trying to read/write the user object here
+private UserAccount user;
 
     private String ipAddress;
     private String deviceId;
