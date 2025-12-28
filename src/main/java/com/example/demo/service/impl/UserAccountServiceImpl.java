@@ -1,63 +1,58 @@
 package com.example.demo.service.impl;
 
-import org.springframework.http.ResponseEntity;
-
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repo;
-    private final PasswordEncoder encoder;
+    private final UserAccountRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserAccountServiceImpl(UserAccountRepository repo, PasswordEncoder encoder) {
-        this.repo = repo;
-        this.encoder = encoder;
+    public UserAccountServiceImpl(UserAccountRepository userRepo,
+                                  PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setCreatedAt(LocalDateTime.now());
-        if (user.getStatus() == null) {
-            user.setStatus("ACTIVE");
-        }
-        return repo.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(user);
     }
 
-   @Override
-public UserAccount getUserById(Long id) {
-    return userRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-}
+    @Override
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = repo.findById(id)
+        UserAccount user = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setStatus(status);
-        return repo.save(user);
+        return userRepo.save(user);
     }
-
 
     @Override
     public List<UserAccount> getAllUsers() {
-        return repo.findAll();
+        return userRepo.findAll();
     }
 
     @Override
     public UserAccount findByUsername(String username) {
-        return repo.findByUsername(username).orElse(null);
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
+
 // package com.example.demo.service.impl;
 
 // import com.example.demo.entity.UserAccount;
