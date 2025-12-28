@@ -265,7 +265,7 @@
 // }
 
 package com.example.demo.security;
-
+import com.example.demo.entity.UserAccount;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
