@@ -1,4 +1,3 @@
-// 
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -12,10 +11,9 @@ public class ViolationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ✔ Proper relationship with UserAccount
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) 
-    private UserAccount userId;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserAccount user;   // <-- Entity reference, not Long
 
     @Column(name = "event_id")
     private Long eventId;
@@ -30,13 +28,12 @@ public class ViolationRecord {
     @JoinColumn(name = "policy_rule_id")
     private PolicyRule policyRule;
 
-    // Default Constructor
     public ViolationRecord() {}
 
-    // Updated Parameterized Constructor
-    public ViolationRecord(UserAccount userId, Long eventId, PolicyRule policyRule,
+    // Updated constructor - accepts UserAccount not Long
+    public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
                            String violationType, String details, String severity) {
-        this.userId = userId;
+        this.user = user;
         this.eventId = eventId;
         this.policyRule = policyRule;
         this.violationType = violationType;
@@ -51,8 +48,8 @@ public class ViolationRecord {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public UserAccount getUserId() { return userId; }
-    public void setUserId(UserAccount userId) { this.userId = userId; }
+    public UserAccount getUser() { return user; }
+    public void setUser(UserAccount user) { this.user = user; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
