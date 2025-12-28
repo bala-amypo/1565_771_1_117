@@ -20,7 +20,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
         device.setLastSeen(LocalDateTime.now());
-        device.setIsTrusted(false);
+        device.setIsTrusted(true);
         return repository.save(device);
     }
 
