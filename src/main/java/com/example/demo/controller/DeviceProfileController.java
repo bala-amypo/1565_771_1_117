@@ -36,7 +36,7 @@ public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
     }
 
     @GetMapping("/lookup/{deviceId}")
-    public ResponseEntity<DeviceProfile> getByDevice(@PathVariable Long deviceId) {
+    public ResponseEntity<DeviceProfile> getByDevice(@PathVariable String deviceId) {
         return ResponseEntity.ok(service.getByDeviceId(deviceId));
     }
     

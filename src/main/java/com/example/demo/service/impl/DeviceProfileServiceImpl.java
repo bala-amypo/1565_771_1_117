@@ -42,7 +42,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public DeviceProfile getByDeviceId(Long deviceId) {
+    public DeviceProfile getByDeviceId(String deviceId) {
         // Change: Use ResponseStatusException for proper 404 status
         return repository.findByDeviceId(deviceId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device not found with deviceId: " + deviceId));
