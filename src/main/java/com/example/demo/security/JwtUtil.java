@@ -277,24 +277,20 @@ public class JwtUtil {
     private SecretKey key;
     private long expiration;
 
-    // Required constructor
     public JwtUtil(String secret, Long expiration) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expiration = (expiration != null ? expiration : 3600000L);
     }
 
-    // No-arg ctor required by test
     public JwtUtil() {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         this.expiration = 3600000;
     }
 
-    // Required in test setup
     public void initKey() {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
-    // -------- TOKEN CREATION --------
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -313,7 +309,6 @@ public class JwtUtil {
         return generateToken(claims, user.getEmail());
     }
 
-    // -------- THE FIX: Return Jws<Claims> so .getPayload() exists --------
     public Jws<Claims> parseToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -321,12 +316,10 @@ public class JwtUtil {
                 .parseClaimsJws(token);
     }
 
-    // Tests expect payload access like: parseToken(...).getPayload().get("email")
     public Jws<Claims> getPayload(String token) {
         return parseToken(token);
     }
 
-    // -------- Convenience extractors --------
     public String extractUsername(String token) {
         return parseToken(token).getPayload().getSubject();
     }
