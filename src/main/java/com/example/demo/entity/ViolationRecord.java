@@ -5,10 +5,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "violation_record")
+
 public class ViolationRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ManyToOne
+    @JoinColumn(name = "policy_rule_id", nullable = true)
+    private PolicyRule policyRule;
+
     private Long id;
 
     private Long userId;
