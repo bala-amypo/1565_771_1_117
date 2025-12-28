@@ -47,18 +47,19 @@ private Long violationUserId; // changed name so no duplicate mapping
 
     public ViolationRecord() {}
 
-    public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
-                           String violationType, String details, String severity) {
-        this.user = user;                // entity reference
-        this.user_Id = user.getId();      // sync FK shadow field
-        this.eventId = eventId;
-        this.policyRule = policyRule;
-        this.violationType = violationType;
-        this.details = details;
-        this.severity = severity;
-        this.resolved = false;
-        this.detectedAt = LocalDateTime.now();
-    }
+public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
+                       String violationType, String details, String severity) {
+    this.user = user;                                 // entity reference
+    this.violationUserId = (user != null ? user.getId() : null); // sync FK field
+    this.eventId = eventId;
+    this.policyRule = policyRule;
+    this.violationType = violationType;
+    this.details = details;
+    this.severity = severity;
+    this.resolved = false;
+    this.detectedAt = LocalDateTime.now();
+}
+
 
     // -------------------- GETTERS & SETTERS --------------------
 
@@ -69,7 +70,7 @@ private Long violationUserId; // changed name so no duplicate mapping
     public UserAccount getUser() { return user; }
     public void setUser(UserAccount user) {
         this.user = user;
-        this.user_Id = (user != null ? user.getId() : null); // keep both in sync
+        this.userId = (user != null ? user.getId() : null); // keep both in sync
     }
 
 
