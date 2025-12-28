@@ -42,8 +42,9 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-public DeviceProfile getById(Long id) {
-    return repository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No device with DB ID: " + id));
-}
+    public DeviceProfile getByDeviceId(Long deviceId) {
+        // Change: Use ResponseStatusException for proper 404 status
+        return repository.findByDeviceId(deviceId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device not found with deviceId: " + deviceId));
+    }
 }
