@@ -97,7 +97,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         return repo.findAll();
     }
     public UserAccount findByUsername(String username){
-    return repo.
+    return repo.findByUsername(username);
     }
 }
 
