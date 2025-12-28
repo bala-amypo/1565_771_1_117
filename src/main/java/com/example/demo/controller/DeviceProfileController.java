@@ -34,12 +34,13 @@ public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
     public ResponseEntity<List<DeviceProfile>> getByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(service.getDevicesByUser(userId));
     }
+@GetMapping("/lookup/{deviceId}")
+public ResponseEntity<DeviceProfile> getByDeviceId(@PathVariable String deviceId) {
+    return service.findByDeviceId(deviceId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
 
-    @GetMapping("/lookup/{deviceId}")
-    public ResponseEntity<DeviceProfile> getByDevice(@PathVariable String deviceId) {
-        return ResponseEntity.ok(service.getByDeviceId(deviceId));
-    }
-    
 }
 // package com.example.demo.controller;
 

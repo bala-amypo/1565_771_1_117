@@ -13,41 +13,36 @@ import java.util.List;
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository repository;
+    private final DeviceProfileRepository repo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository repository) {
-        this.repository = repository;
+    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
-        device.setLastSeen(LocalDateTime.now());
-        device.setIsTrusted(true);
-        return repository.save(device);
+        return repo.save(device);
     }
 
     @Override
     public DeviceProfile updateTrustStatus(Long id, boolean trusted) {
-        // Change: Use ResponseStatusException for proper 404 status
-        DeviceProfile device = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device not found with ID: " + id));
-        
-        device.setIsTrusted(trusted); // Use the variable instead of hardcoded 'false'
-        return repository.save(device);
+        DeviceProfile device = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+        device.setTrusted(trusted);
+        return repo.save(device);
     }
 
     @Override
     public List<DeviceProfile> getDevicesByUser(Long userId) {
-        return repository.findByUserId(userId);
+        return repo.findByUserId(userId);
     }
 
     @Override
-    public DeviceProfile getByDeviceId(String deviceId) {
-        // Change: Use ResponseStatusException for proper 404 status
-        return repository.findByDeviceId(deviceId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device not found with deviceId: " + deviceId));
+    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
+        return repo.findByDeviceId(deviceId);
     }
 }
+
 // package com.example.demo.service.impl;
 
 // import com.example.demo.entity.DeviceProfile;
