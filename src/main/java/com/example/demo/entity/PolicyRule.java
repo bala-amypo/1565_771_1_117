@@ -31,7 +31,7 @@ public class PolicyRule {
 
     // Getters and Setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id}
+    public void setId(Long id) { this.id = id; }
     public String getRuleCode() { return ruleCode; }
     public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
     public String getDescription() { return description; }
