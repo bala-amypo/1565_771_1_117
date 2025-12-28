@@ -43,7 +43,7 @@
 //     public List<ViolationRecord> getAllViolations() {
 //         return repo.findAll();
 //     }
-// }
+//}
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ViolationRecord;
