@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "login_event")
@@ -12,9 +13,9 @@ public class LoginEvent {
     private Long id;
 
     @ManyToOne
-@JoinColumn(name = "user_id")
-@JsonIgnore // This prevents the parser from trying to read/write the user object here
-private UserAccount user;
+    @JoinColumn(name = "user_id")
+    @JsonIgnore 
+    private UserAccount user;
 
     private String ipAddress;
     private String deviceId;
@@ -24,23 +25,18 @@ private UserAccount user;
 
     public LoginEvent() {}
 
+    // Getters & Setters ...
     public Long getId() { return id; }
-
     public UserAccount getUser() { return user; }
     public void setUser(UserAccount user) { this.user = user; }
-
     public String getIpAddress() { return ipAddress; }
     public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
-
     public String getDeviceId() { return deviceId; }
     public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
-
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
-
     public String getLoginStatus() { return loginStatus; }
     public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
-
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }
