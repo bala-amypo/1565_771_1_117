@@ -13,8 +13,11 @@ public class ViolationRecord {
 
    // In ViolationRecord.java
 
-@Column(name = "userId") // Explicitly naming it to avoid logical name confusion
-private Long userId;
+// @Column(name = "userId") // Explicitly naming it to avoid logical name confusion
+// private Long userId;
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "user_id", nullable = false) // this creates the FK properly
+    private UserAccount user; // <-- RELATION FIELD
 
 @Column(name = "eventId")
 private Long eventId;
