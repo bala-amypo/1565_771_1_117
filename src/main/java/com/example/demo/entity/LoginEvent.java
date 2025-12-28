@@ -12,9 +12,9 @@ public class LoginEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonIgnore 
+    @JsonIgnore
     private UserAccount user;
 
     private String ipAddress;
@@ -25,7 +25,16 @@ public class LoginEvent {
 
     public LoginEvent() {}
 
-    // Getters & Setters ...
+    public LoginEvent(UserAccount user, String ipAddress, String deviceId, String location, String loginStatus) {
+        this.user = user;
+        this.ipAddress = ipAddress;
+        this.deviceId = deviceId;
+        this.location = location;
+        this.loginStatus = loginStatus;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    // Getters and Setters
     public Long getId() { return id; }
     public UserAccount getUser() { return user; }
     public void setUser(UserAccount user) { this.user = user; }
