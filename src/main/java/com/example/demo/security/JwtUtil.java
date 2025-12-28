@@ -224,43 +224,122 @@
 //                 .getBody();
 //     }
 // }
+// package com.example.demo.security;
+
+// public class JwtUtil {
+
+//     private String secret;
+//     private long expiry;
+//     private boolean enabled;
+
+    
+//     public JwtUtil() {
+//     }
+
+//     public JwtUtil(String secret, long expiry, boolean enabled) {
+//         this.secret = secret;
+//         this.expiry = expiry;
+//         this.enabled = enabled;
+//     }
+
+//     public String generateToken(String username, Long userId, String email, String role) {
+//         return username + ":" + userId + ":" + email + ":" + role;
+//     }
+
+//     public boolean validateToken(String token) {
+//         if (token == null) return false;
+//         return token.split(":").length == 4;
+//     }
+
+//     public String getEmail(String token) {
+//         return token.split(":")[2];
+//     }
+
+//     public Long getUserId(String token) {
+//         return Long.parseLong(token.split(":")[1]);
+//     }
+
+//     public String getRole(String token) {
+//         return token.split(":")[3];
+//     }
+// }
+
 package com.example.demo.security;
+
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
+import java.util.Date;
+import java.util.Map;
 
 public class JwtUtil {
 
-    private String secret;
-    private long expiry;
-    private boolean enabled;
+    private SecretKey key;
+    private long expiration;
 
-    
+    // Required constructor
+    public JwtUtil(String secret, Long expiration) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expiration = (expiration != null ? expiration : 3600000L);
+    }
+
+    // No-arg ctor required by test
     public JwtUtil() {
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        this.expiration = 3600000;
     }
 
-    public JwtUtil(String secret, long expiry, boolean enabled) {
-        this.secret = secret;
-        this.expiry = expiry;
-        this.enabled = enabled;
+    // Required in test setup
+    public void initKey() {
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
-    public String generateToken(String username, Long userId, String email, String role) {
-        return username + ":" + userId + ":" + email + ":" + role;
+    // -------- TOKEN CREATION --------
+    public String generateToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .signWith(key)
+                .compact();
     }
 
-    public boolean validateToken(String token) {
-        if (token == null) return false;
-        return token.split(":").length == 4;
+    public String generateTokenForUser(com.example.demo.entity.UserAccount user) {
+        Map<String, Object> claims = Map.of(
+                "userId", user.getId(),
+                "email", user.getEmail(),
+                "role", user.getRole()
+        );
+        return generateToken(claims, user.getEmail());
     }
 
-    public String getEmail(String token) {
-        return token.split(":")[2];
+    // -------- THE FIX: Return Jws<Claims> so .getPayload() exists --------
+    public Jws<Claims> parseToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
     }
 
-    public Long getUserId(String token) {
-        return Long.parseLong(token.split(":")[1]);
+    // Tests expect payload access like: parseToken(...).getPayload().get("email")
+    public Jws<Claims> getPayload(String token) {
+        return parseToken(token);
     }
 
-    public String getRole(String token) {
-        return token.split(":")[3];
+    // -------- Convenience extractors --------
+    public String extractUsername(String token) {
+        return parseToken(token).getPayload().getSubject();
+    }
+
+    public Long extractUserId(String token) {
+        return Long.valueOf(parseToken(token).getPayload().get("userId").toString());
+    }
+
+    public String extractRole(String token) {
+        return (String) parseToken(token).getPayload().get("role");
+    }
+
+    public boolean isTokenValid(String token, String username) {
+        return extractUsername(token).equals(username);
     }
 }
-
