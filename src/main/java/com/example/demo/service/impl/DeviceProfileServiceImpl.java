@@ -3,7 +3,9 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,9 +28,11 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     @Override
     public DeviceProfile updateTrustStatus(Long id, boolean trusted) {
+        // Change: Use ResponseStatusException for proper 404 status
         DeviceProfile device = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Device not found"));
-        device.setIsTrusted(trusted);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device not found with ID: " + id));
+        
+        device.setIsTrusted(trusted); // Use the variable instead of hardcoded 'false'
         return repository.save(device);
     }
 
@@ -39,7 +43,8 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     @Override
     public DeviceProfile getByDeviceId(String deviceId) {
+        // Change: Use ResponseStatusException for proper 404 status
         return repository.findByDeviceId(deviceId)
-                .orElseThrow(() -> new RuntimeException("Device not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device not found with deviceId: " + deviceId));
     }
 }
