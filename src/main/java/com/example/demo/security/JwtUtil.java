@@ -37,45 +37,45 @@
 // // //         return token.split(":")[3];
 // // //     }
 // // // }
-package com.example.demo.security;
+// package com.example.demo.security;
 
-import org.springframework.stereotype.Component;
+// import org.springframework.stereotype.Component;
 
-@Component   // ✅ THIS WAS MISSING
-public class JwtUtil {
+// @Component   // ✅ THIS WAS MISSING
+// public class JwtUtil {
 
-    // ===== REQUIRED BY TESTS =====
-    public JwtUtil() {}
+//     // ===== REQUIRED BY TESTS =====
+//     public JwtUtil() {}
 
-    public JwtUtil(String secret, long expiration, boolean enabled) {}
+//     public JwtUtil(String secret, long expiration, boolean enabled) {}
 
-    // ===== TOKEN FORMAT =====
-    // email:userId:role:username
+//     // ===== TOKEN FORMAT =====
+//     // email:userId:role:username
 
-    public String generateToken(String email, Long userId, String role, String username) {
-        return email + ":" + userId + ":" + role + ":" + username;
-    }
+//     public String generateToken(String email, Long userId, String role, String username) {
+//         return email + ":" + userId + ":" + role + ":" + username;
+//     }
 
-    public boolean validateToken(String token) {
-        return token != null && token.split(":").length == 4;
-    }
+//     public boolean validateToken(String token) {
+//         return token != null && token.split(":").length == 4;
+//     }
 
-    public String getEmail(String token) {
-        return token.split(":")[0];
-    }
+//     public String getEmail(String token) {
+//         return token.split(":")[0];
+//     }
 
-    public Long getUserId(String token) {
-        return Long.parseLong(token.split(":")[1]);
-    }
+//     public Long getUserId(String token) {
+//         return Long.parseLong(token.split(":")[1]);
+//     }
 
-    public String getRole(String token) {
-        return token.split(":")[2];
-    }
+//     public String getRole(String token) {
+//         return token.split(":")[2];
+//     }
 
-    public String getUsername(String token) {
-        return token.split(":")[3];
-    }
-}
+//     public String getUsername(String token) {
+//         return token.split(":")[3];
+//     }
+// }
 // // package com.example.demo.security;
 
 // // import io.jsonwebtoken.Claims;
