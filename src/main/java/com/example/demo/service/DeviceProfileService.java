@@ -1,3 +1,10 @@
+package com.example.demo.service;
+
+import com.example.demo.entity.DeviceProfile;
+
+import java.util.List;
+import java.util.Optional;
+
 public interface DeviceProfileService {
 
     DeviceProfile registerDevice(DeviceProfile device);
@@ -6,5 +13,5 @@ public interface DeviceProfileService {
 
     List<DeviceProfile> getDevicesByUser(Long userId);
 
-    Optional<DeviceProfile> findByDeviceId(String deviceId); // ✅ REQUIRED
+    Optional<DeviceProfile> findByDeviceId(String deviceId);
 }
