@@ -22,7 +22,7 @@ public class ViolationRecordController {
         if (record.getPolicyRule() == null) {
             throw new IllegalArgumentException("policyRule must be provided");
         }
-        return ResponseEntity.ok(service.logViolation(record));
+        return ResponseEntity.ok(violationService.logViolation(record));
 }
 
     @GetMapping("/user/{userId}")
