@@ -40,7 +40,7 @@
 //         return ResponseEntity.ok(service.getByDeviceId(deviceId));
 //     }
     
-// }
+//}
 package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;

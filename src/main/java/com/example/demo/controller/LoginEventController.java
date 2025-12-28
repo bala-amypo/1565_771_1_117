@@ -35,7 +35,7 @@
 //     public List<LoginEvent> all() {
 //         return service.getAllEvents();
 //     }
-// }
+//}
 package com.example.demo.controller;
 
 import com.example.demo.entity.LoginEvent;

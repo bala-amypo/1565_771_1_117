@@ -38,7 +38,7 @@
 //     public ResponseEntity<List<PolicyRule>> getAllRules() {
 //         return ResponseEntity.ok(policyRuleService.getAllRules());
 //     }
-// }
+//}
 package com.example.demo.controller;
 
 import com.example.demo.entity.PolicyRule;

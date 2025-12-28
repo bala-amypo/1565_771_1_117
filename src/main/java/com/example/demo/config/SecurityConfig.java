@@ -45,7 +45,7 @@
 //     public PasswordEncoder passwordEncoder() {
 //         return new BCryptPasswordEncoder();
 //     }
-// }
+//}
 package com.example.demo.config;
 
 import com.example.demo.security.JwtAuthenticationEntryPoint;
