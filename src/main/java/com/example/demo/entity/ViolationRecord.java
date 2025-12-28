@@ -24,7 +24,7 @@ private UserAccount user;
 // SHADOW FIELD (writes ID)
 @AttributeOverride(name = "userId", column = @Column(name = "user_id"))
 @Column(name = "user_id")
-private Long userId;
+private Long user_Id;
 
     /**
      * Event FK
@@ -49,7 +49,7 @@ private Long userId;
     public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
                            String violationType, String details, String severity) {
         this.user = user;                // entity reference
-        this.userId = user.getId();      // sync FK shadow field
+        this.user_Id = user.getId();      // sync FK shadow field
         this.eventId = eventId;
         this.policyRule = policyRule;
         this.violationType = violationType;
@@ -72,8 +72,8 @@ private Long userId;
     }
 
     // FK shadow field side (used by existing code)
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public Long getUserId() { return user_Id; }
+    public void setUserId(Long userId) { this.user_Id = userId; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
