@@ -24,5 +24,5 @@ public interface PolicyRuleRepository extends JpaRepository<PolicyRule, Long> {
 
     List<PolicyRule> findByActiveTrue();
 
-    PolicyRule> findByRuleCode(String ruleCode);
+    PolicyRule findByRuleCode(String ruleCode);
 }
