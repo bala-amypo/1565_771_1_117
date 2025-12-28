@@ -11,5 +11,5 @@ public interface DeviceProfileService {
 
     List<DeviceProfile> getDevicesByUser(Long userId);
 
-    DeviceProfile getByDeviceId(String deviceId); // ✅ MUST MATCH
+    DeviceProfile getByDeviceId(Long deviceId); // ✅ MUST MATCH
 }
