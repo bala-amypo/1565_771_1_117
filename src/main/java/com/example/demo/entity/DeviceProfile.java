@@ -12,10 +12,8 @@ public class DeviceProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private UserAccount user;
+   @Column(name = "user_id")
+    private Long userId;
 
     private String deviceId;
     private String deviceType;
