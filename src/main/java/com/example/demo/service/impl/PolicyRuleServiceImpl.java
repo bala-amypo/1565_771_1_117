@@ -80,5 +80,10 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     public List<PolicyRule> getAllRules() {
         return repo.findAll();
     }
+
+    public PolicyRule getRuleByCode(String ruleCode){
+    return repo.findByRuleCode(ruleCode);
+    }
+
 }
 
