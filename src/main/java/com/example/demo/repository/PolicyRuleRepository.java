@@ -13,7 +13,6 @@ public interface PolicyRuleRepository extends JpaRepository<PolicyRule, Long> {
     Optional<PolicyRule> findByRuleCode(String ruleCode);
 }
 
-}
 // package com.example.demo.repository;
 
 // import com.example.demo.entity.PolicyRule;
