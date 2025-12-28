@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user_account")
@@ -21,22 +22,27 @@ public class UserAccount {
     private String status;
     private LocalDateTime createdAt;
 
+    // --- Relationships (Ignored in JSON to prevent input clutter) ---
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-@JoinColumn(name = "user_id", insertable = false, updatable = false)
-private List<LoginEvent> loginEvents = new ArrayList<>();
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private List<LoginEvent> loginEvents = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-@JoinColumn(name = "user_id", insertable = false, updatable = false)
-private List<DeviceProfile> deviceProfiles = new ArrayList<>();
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private List<DeviceProfile> deviceProfiles = new ArrayList<>();
 
-   // In UserAccount.java
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    private List<ViolationRecord> violations = new ArrayList<>();
 
-@OneToMany
-@JoinColumn(name = "userId", referencedColumnName = "id", insertable = false, updatable = false)
-private List<ViolationRecord> violations = new ArrayList<>();
+    // --- Constructors ---
+
     public UserAccount() {}
 
-    // Parameterized Constructor
     public UserAccount(String employeeId, String username, String email, String password, String role, String status) {
         this.employeeId = employeeId;
         this.username = username;
@@ -47,27 +53,49 @@ private List<ViolationRecord> violations = new ArrayList<>();
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+    // --- Getters and Setters ---
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public String getEmployeeId() { return employeeId; }
     public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
+
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // Relationships (Internal access for Service/Logic)
     public List<LoginEvent> getLoginEvents() { return loginEvents; }
     public void setLoginEvents(List<LoginEvent> loginEvents) { this.loginEvents = loginEvents; }
+
     public List<DeviceProfile> getDeviceProfiles() { return deviceProfiles; }
     public void setDeviceProfiles(List<DeviceProfile> deviceProfiles) { this.deviceProfiles = deviceProfiles; }
+
     public List<ViolationRecord> getViolations() { return violations; }
     public void setViolations(List<ViolationRecord> violations) { this.violations = violations; }
+
+    /**
+     * Optional: Automatically set timestamp before saving to DB
+     */
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 }
