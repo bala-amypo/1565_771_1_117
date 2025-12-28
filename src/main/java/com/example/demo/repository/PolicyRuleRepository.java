@@ -10,7 +10,7 @@ public interface PolicyRuleRepository extends JpaRepository<PolicyRule, Long> {
 
     List<PolicyRule> findByActiveTrue();
 
-    Optional<PolicyRule> findByRuleCode(String ruleCode);
+    PolicyRule findByRuleCode(String ruleCode);
 }
 
 // package com.example.demo.repository;
