@@ -23,8 +23,8 @@ public class DeviceProfile {
 
     public DeviceProfile() {}
 
-    public DeviceProfile(UserAccount user, String deviceId, String deviceType, String osVersion, Boolean isTrusted) {
-        this.user = user;
+    public DeviceProfile(Long userId, String deviceId, String deviceType, String osVersion, Boolean isTrusted) {
+        this.userId = userId;
         this.deviceId = deviceId;
         this.deviceType = deviceType;
         this.osVersion = osVersion;
