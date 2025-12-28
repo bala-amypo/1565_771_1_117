@@ -18,10 +18,12 @@ public class ViolationRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<ViolationRecord> logViolation(
-            @RequestBody ViolationRecord violation) {
-        return ResponseEntity.ok(violationService.logViolation(violation));
-    }
+    public ResponseEntity<ViolationRecord> create(@RequestBody ViolationRecord record) {
+        if (record.getPolicyRule() == null) {
+            throw new IllegalArgumentException("policyRule must be provided");
+        }
+        return ResponseEntity.ok(service.logViolation(record));
+}
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ViolationRecord>> getByUser(

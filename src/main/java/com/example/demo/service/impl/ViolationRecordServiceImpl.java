@@ -38,6 +38,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         return repo.findByResolvedFalse();
     }
 
+
     @Override
     public List<ViolationRecord> getAllViolations() {
         return repo.findAll();
