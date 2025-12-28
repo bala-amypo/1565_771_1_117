@@ -24,8 +24,9 @@ public class UserAccount {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LoginEvent> loginEvents = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DeviceProfile> deviceProfiles = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+@JoinColumn(name = "user_id", insertable = false, updatable = false)
+private List<DeviceProfile> deviceProfiles = new ArrayList<>();
 
    // In UserAccount.java
 
