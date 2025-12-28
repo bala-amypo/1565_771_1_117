@@ -1,44 +1,54 @@
-package com.example.demo.entity;
+// package com.example.demo.entity;
 
-import jakarta.persistence.*;
+// import jakarta.persistence.*;
 
-@Entity
-@Table(name = "policy_rule")
-public class PolicyRule {
+// @Entity
+// @Table(name = "policy_rule")
+// public class PolicyRule {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    private String ruleCode;
-    private String description;
-    private String severity;
+//     private String ruleCode;
+//     private String description;
+//     private String severity;
     
-    @Column(columnDefinition = "TEXT")
-    private String conditionsJson;
+//     @Column(columnDefinition = "TEXT")
+//     private String conditionsJson;
     
-    private Boolean active;
+//     private Boolean active;
 
-    public PolicyRule() {}
+//     public PolicyRule() {}
 
-    public PolicyRule(String ruleCode, String description, String severity, String conditionsJson, Boolean active) {
-        this.ruleCode = ruleCode;
-        this.description = description;
-        this.severity = severity;
-        this.conditionsJson = conditionsJson;
-        this.active = active;
-    }
+//     public PolicyRule(String ruleCode, String description, String severity, String conditionsJson, Boolean active) {
+//         this.ruleCode = ruleCode;
+//         this.description = description;
+//         this.severity = severity;
+//         this.conditionsJson = conditionsJson;
+//         this.active = active;
+//     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public String getRuleCode() { return ruleCode; }
-    public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public String getSeverity() { return severity; }
-    public void setSeverity(String severity) { this.severity = severity; }
-    public String getConditionsJson() { return conditionsJson; }
-    public void setConditionsJson(String conditionsJson) { this.conditionsJson = conditionsJson; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+//     // Getters and Setters
+//     public Long getId() { return id; }
+//     public String getRuleCode() { return ruleCode; }
+//     public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
+//     public String getDescription() { return description; }
+//     public void setDescription(String description) { this.description = description; }
+//     public String getSeverity() { return severity; }
+//     public void setSeverity(String severity) { this.severity = severity; }
+//     public String getConditionsJson() { return conditionsJson; }
+//     public void setConditionsJson(String conditionsJson) { this.conditionsJson = conditionsJson; }
+//     public Boolean getActive() { return active; }
+//     public void setActive(Boolean active) { this.active = active; }
+// }
+package com.example.demo.repository;
+
+import com.example.demo.entity.PolicyRule;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface PolicyRuleRepository extends JpaRepository<PolicyRule, Long> {
+    List<PolicyRule> findByActiveTrue();
 }
