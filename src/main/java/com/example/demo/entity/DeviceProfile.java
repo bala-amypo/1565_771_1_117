@@ -34,7 +34,8 @@ public class DeviceProfile {
 
     // Getters and Setters
     public Long getId() { return id; }
-    public UserAccount getUser() { return user; }
+    public Long setUserId() { this.userId = userId; }
+    public Long getUserId() { return userId; }
     public void setUser(UserAccount user) { this.user = user; }
     public String getDeviceId() { return deviceId; }
     public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
