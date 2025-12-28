@@ -16,15 +16,16 @@ public class ViolationRecord {
      * This keeps the OneToMany mapping intact
      */
 
-    // RELATION FIELD (reads entity)
+// REAL RELATION OWNER (Hibernate relationship)
 @ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+@JoinColumn(name = "user_id", referencedColumnName = "id") // the real FK
 private UserAccount user;
 
-// SHADOW FIELD (writes ID)
-@AttributeOverride(name = "userId", column = @Column(name = "user_id"))
+// SHADOW FIELD TO SUPPORT setUserId() WITHOUT MAPPING CONFLICT
+// 👉 Notice: different field name, SAME COLUMN in DB
 @Column(name = "user_id")
-private Long user_Id;
+private Long violationUserId; // changed name so no duplicate mapping
+
 
     /**
      * Event FK
@@ -68,12 +69,18 @@ private Long user_Id;
     public UserAccount getUser() { return user; }
     public void setUser(UserAccount user) {
         this.user = user;
-        this.userId = (user != null ? user.getId() : null); // keep both in sync
+        this.user_Id = (user != null ? user.getId() : null); // keep both in sync
     }
 
-    // FK shadow field side (used by existing code)
-    public Long getUserId() { return user_Id; }
-    public void setUserId(Long userId) { this.user_Id = userId; }
+
+public Long getUserId() {
+    return violationUserId;
+}
+
+public void setUserId(Long userId) {
+    this.violationUserId = userId;
+}
+
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
