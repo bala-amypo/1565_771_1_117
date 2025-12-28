@@ -21,8 +21,9 @@ public class UserAccount {
     private String status;
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LoginEvent> loginEvents = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+@JoinColumn(name = "user_id", insertable = false, updatable = false)
+private List<LoginEvent> loginEvents = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 @JoinColumn(name = "user_id", insertable = false, updatable = false)
