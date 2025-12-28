@@ -11,5 +11,5 @@ public interface DeviceProfileService {
 
     List<DeviceProfile> getDevicesByUser(Long userId);
 
-    DeviceProfile getByDeviceId(String deviceId); 
+    DeviceProfile findByDeviceId(String deviceId); 
 }
