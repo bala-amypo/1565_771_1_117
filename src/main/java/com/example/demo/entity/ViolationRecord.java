@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "violation_record")
@@ -12,18 +11,8 @@ public class ViolationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private UserAccount user;
-
-    @OneToOne
-    @JoinColumn(name = "event_id")
-    private LoginEvent loginEvent;
-
-    @ManyToOne
-    @JoinColumn(name = "policy_rule_id")
-    private PolicyRule policyRule;
+    private Long userId;   // Kept as Long per your requirement
+    private Long eventId;  // Kept as Long per your requirement
 
     private String violationType;
     private String details;
@@ -31,11 +20,17 @@ public class ViolationRecord {
     private Boolean resolved;
     private LocalDateTime detectedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "policy_rule_id")
+    private PolicyRule policyRule;
+
+    // Default Constructor
     public ViolationRecord() {}
 
-    public ViolationRecord(UserAccount user, LoginEvent loginEvent, PolicyRule policyRule, String violationType, String details, String severity) {
-        this.user = user;
-        this.loginEvent = loginEvent;
+    // Parameterized Constructor
+    public ViolationRecord(Long userId, Long eventId, PolicyRule policyRule, String violationType, String details, String severity) {
+        this.userId = userId;
+        this.eventId = eventId;
         this.policyRule = policyRule;
         this.violationType = violationType;
         this.details = details;
@@ -44,22 +39,32 @@ public class ViolationRecord {
         this.detectedAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+    // -------------------- GETTERS & SETTERS --------------------
+
     public Long getId() { return id; }
-    public UserAccount getUser() { return user; }
-    public void setUser(UserAccount user) { this.user = user; }
-    public LoginEvent getLoginEvent() { return loginEvent; }
-    public void setLoginEvent(LoginEvent loginEvent) { this.loginEvent = loginEvent; }
-    public PolicyRule getPolicyRule() { return policyRule; }
-    public void setPolicyRule(PolicyRule policyRule) { this.policyRule = policyRule; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public Long getEventId() { return eventId; }
+    public void setEventId(Long eventId) { this.eventId = eventId; }
+
     public String getViolationType() { return violationType; }
     public void setViolationType(String violationType) { this.violationType = violationType; }
+
     public String getDetails() { return details; }
     public void setDetails(String details) { this.details = details; }
+
     public String getSeverity() { return severity; }
     public void setSeverity(String severity) { this.severity = severity; }
+
     public Boolean getResolved() { return resolved; }
     public void setResolved(Boolean resolved) { this.resolved = resolved; }
+
     public LocalDateTime getDetectedAt() { return detectedAt; }
     public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
+
+    public PolicyRule getPolicyRule() { return policyRule; }
+    public void setPolicyRule(PolicyRule policyRule) { this.policyRule = policyRule; }
 }
