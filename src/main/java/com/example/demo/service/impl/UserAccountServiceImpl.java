@@ -36,7 +36,6 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount updateUserStatus(Long id, String status) {
         UserAccount user = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
         user.setStatus(status);
         return userRepo.save(user);
     }
@@ -52,6 +51,7 @@ public class UserAccountServiceImpl implements UserAccountService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
+
 
 // package com.example.demo.service.impl;
 
