@@ -1,32 +1,67 @@
-// // package com.example.demo.security;
+// // // package com.example.demo.security;
 
-// // public class JwtUtil {
+// // // public class JwtUtil {
 
-// //     private String secret;
-// //     private long expiry;
-// //     private boolean enabled;
+// // //     private String secret;
+// // //     private long expiry;
+// // //     private boolean enabled;
 
     
-// //     public JwtUtil() {
-// //     }
+// // //     public JwtUtil() {
+// // //     }
 
-// //     public JwtUtil(String secret, long expiry, boolean enabled) {
-// //         this.secret = secret;
-// //         this.expiry = expiry;
-// //         this.enabled = enabled;
-// //     }
+// // //     public JwtUtil(String secret, long expiry, boolean enabled) {
+// // //         this.secret = secret;
+// // //         this.expiry = expiry;
+// // //         this.enabled = enabled;
+// // //     }
 
-// //     public String generateToken(String username, Long userId, String email, String role) {
-// //         return username + ":" + userId + ":" + email + ":" + role;
+// // //     public String generateToken(String username, Long userId, String email, String role) {
+// // //         return username + ":" + userId + ":" + email + ":" + role;
+// // //     }
+
+// // //     public boolean validateToken(String token) {
+// // //         if (token == null) return false;
+// // //         return token.split(":").length == 4;
+// // //     }
+
+// // //     public String getEmail(String token) {
+// // //         return token.split(":")[2];
+// // //     }
+
+// // //     public Long getUserId(String token) {
+// // //         return Long.parseLong(token.split(":")[1]);
+// // //     }
+
+// // //     public String getRole(String token) {
+// // //         return token.split(":")[3];
+// // //     }
+// // // }
+// // package com.example.demo.security;
+
+// // import org.springframework.stereotype.Component;
+
+// // @Component   // ✅ THIS WAS MISSING
+// // public class JwtUtil {
+
+// //     // ===== REQUIRED BY TESTS =====
+// //     public JwtUtil() {}
+
+// //     public JwtUtil(String secret, long expiration, boolean enabled) {}
+
+// //     // ===== TOKEN FORMAT =====
+// //     // email:userId:role:username
+
+// //     public String generateToken(String email, Long userId, String role, String username) {
+// //         return email + ":" + userId + ":" + role + ":" + username;
 // //     }
 
 // //     public boolean validateToken(String token) {
-// //         if (token == null) return false;
-// //         return token.split(":").length == 4;
+// //         return token != null && token.split(":").length == 4;
 // //     }
 
 // //     public String getEmail(String token) {
-// //         return token.split(":")[2];
+// //         return token.split(":")[0];
 // //     }
 
 // //     public Long getUserId(String token) {
@@ -34,47 +69,82 @@
 // //     }
 
 // //     public String getRole(String token) {
+// //         return token.split(":")[2];
+// //     }
+
+// //     public String getUsername(String token) {
 // //         return token.split(":")[3];
 // //     }
-// // }
-// package com.example.demo.security;
+// // // }
+// // package com.example.demo.security;
 
-// import org.springframework.stereotype.Component;
+// // import io.jsonwebtoken.Claims;
+// // import io.jsonwebtoken.Jwts;
+// // import io.jsonwebtoken.SignatureAlgorithm;
+// // import io.jsonwebtoken.security.Keys;
+// // import org.springframework.beans.factory.annotation.Value;
+// // import org.springframework.stereotype.Component;
 
-// @Component   // ✅ THIS WAS MISSING
-// public class JwtUtil {
+// // import javax.crypto.SecretKey;
+// // import java.nio.charset.StandardCharsets;
+// // import java.util.Date;
+// // import java.util.HashMap;
+// // import java.util.Map;
 
-//     // ===== REQUIRED BY TESTS =====
-//     public JwtUtil() {}
+// // @Component
+// // public class JwtUtil {
 
-//     public JwtUtil(String secret, long expiration, boolean enabled) {}
+// //     @Value("${jwt.secret}")
+// //     private String secret;
 
-//     // ===== TOKEN FORMAT =====
-//     // email:userId:role:username
+// //     @Value("${jwt.expiration}")
+// //     private Long expiration;
 
-//     public String generateToken(String email, Long userId, String role, String username) {
-//         return email + ":" + userId + ":" + role + ":" + username;
-//     }
+// //     // Helper to generate the signing key from your secret string
+// //     private SecretKey getSigningKey() {
+// //         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+// //     }
 
-//     public boolean validateToken(String token) {
-//         return token != null && token.split(":").length == 4;
-//     }
+// //     /**
+// //      * ✅ Generates a secure JWT with custom claims.
+// //      * Order of arguments matches your AuthController: (email, userId, role, username)
+// //      */
+// //     public String generateToken(String email, Long userId, String role, String username) {
+// //         Map<String, Object> claims = new HashMap<>();
+// //         claims.put("userId", userId);
+// //         claims.put("email", email);
+// //         claims.put("role", role);
 
-//     public String getEmail(String token) {
-//         return token.split(":")[0];
-//     }
+// //         return Jwts.builder()
+// //                 .setClaims(claims)
+// //                 .setSubject(username) // Use username as the primary subject
+// //                 .setIssuedAt(new Date(System.currentTimeMillis()))
+// //                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
+// //                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+// //                 .compact();
+// //     }
 
-//     public Long getUserId(String token) {
-//         return Long.parseLong(token.split(":")[1]);
-//     }
+// //     // ✅ Validate the token and ensure it's not expired or tampered with
+// //     public boolean validateToken(String token) {
+// //         try {
+// //             Jwts.parserBuilder()
+// //                 .setSigningKey(getSigningKey())
+// //                 .build()
+// //                 .parseClaimsJws(token);
+// //             return true;
+// //         } catch (Exception e) {
+// //             return false;
+// //         }
+// //     }
 
-//     public String getRole(String token) {
-//         return token.split(":")[2];
-//     }
-
-//     public String getUsername(String token) {
-//         return token.split(":")[3];
-//     }
+// //     // Helper to extract all information from the token
+// //     public Claims extractAllClaims(String token) {
+// //         return Jwts.parserBuilder()
+// //                 .setSigningKey(getSigningKey())
+// //                 .build()
+// //                 .parseClaimsJws(token)
+// //                 .getBody();
+// //     }
 // // }
 // package com.example.demo.security;
 
@@ -100,16 +170,13 @@
 //     @Value("${jwt.expiration}")
 //     private Long expiration;
 
-//     // Helper to generate the signing key from your secret string
 //     private SecretKey getSigningKey() {
 //         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 //     }
 
-//     /**
-//      * ✅ Generates a secure JWT with custom claims.
-//      * Order of arguments matches your AuthController: (email, userId, role, username)
-//      */
+//     // ✅ Generate JWT
 //     public String generateToken(String email, Long userId, String role, String username) {
+
 //         Map<String, Object> claims = new HashMap<>();
 //         claims.put("userId", userId);
 //         claims.put("email", email);
@@ -117,28 +184,39 @@
 
 //         return Jwts.builder()
 //                 .setClaims(claims)
-//                 .setSubject(username) // Use username as the primary subject
-//                 .setIssuedAt(new Date(System.currentTimeMillis()))
+//                 .setSubject(username)
+//                 .setIssuedAt(new Date())
 //                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
 //                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
 //                 .compact();
 //     }
 
-//     // ✅ Validate the token and ensure it's not expired or tampered with
+//     // ✅ Validate JWT
 //     public boolean validateToken(String token) {
 //         try {
 //             Jwts.parserBuilder()
-//                 .setSigningKey(getSigningKey())
-//                 .build()
-//                 .parseClaimsJws(token);
+//                     .setSigningKey(getSigningKey())
+//                     .build()
+//                     .parseClaimsJws(token);
 //             return true;
-//         } catch (Exception e) {
+//         } catch (Exception ex) {
 //             return false;
 //         }
 //     }
 
-//     // Helper to extract all information from the token
-//     public Claims extractAllClaims(String token) {
+//     public String getEmail(String token) {
+//         return extractAllClaims(token).get("email", String.class);
+//     }
+
+//     public Long getUserId(String token) {
+//         return extractAllClaims(token).get("userId", Long.class);
+//     }
+
+//     public String getRole(String token) {
+//         return extractAllClaims(token).get("role", String.class);
+//     }
+
+//     private Claims extractAllClaims(String token) {
 //         return Jwts.parserBuilder()
 //                 .setSigningKey(getSigningKey())
 //                 .build()
@@ -148,79 +226,41 @@
 // }
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-@Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
     private String secret;
+    private long expiry;
+    private boolean enabled;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
-
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    
+    public JwtUtil() {
     }
 
-    // ✅ Generate JWT
-    public String generateToken(String email, Long userId, String role, String username) {
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
-        claims.put("email", email);
-        claims.put("role", role);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+    public JwtUtil(String secret, long expiry, boolean enabled) {
+        this.secret = secret;
+        this.expiry = expiry;
+        this.enabled = enabled;
     }
 
-    // ✅ Validate JWT
+    public String generateToken(String username, Long userId, String email, String role) {
+        return username + ":" + userId + ":" + email + ":" + role;
+    }
+
     public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
+        if (token == null) return false;
+        return token.split(":").length == 4;
     }
 
     public String getEmail(String token) {
-        return extractAllClaims(token).get("email", String.class);
+        return token.split(":")[2];
     }
 
     public Long getUserId(String token) {
-        return extractAllClaims(token).get("userId", Long.class);
+        return Long.parseLong(token.split(":")[1]);
     }
 
     public String getRole(String token) {
-        return extractAllClaims(token).get("role", String.class);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return token.split(":")[3];
     }
 }
+
