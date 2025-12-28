@@ -26,7 +26,7 @@ public class DeviceProfileController {
 
     @PutMapping("/{id}/trust")
     public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
-        return ResponseEntity.ok(service.updateTrustStatus(id, true));
+        return ResponseEntity.ok(service.updateTrustStatus(id, false));
     }
 
     @GetMapping("/user/{userId}")
