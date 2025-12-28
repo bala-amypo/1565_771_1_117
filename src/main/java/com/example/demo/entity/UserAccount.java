@@ -22,7 +22,6 @@ public class UserAccount {
     private String status;
     private LocalDateTime createdAt;
 
-    // --- Relationships (Ignored in JSON to prevent input clutter) ---
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,7 +38,6 @@ public class UserAccount {
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     private List<ViolationRecord> violations = new ArrayList<>();
 
-    // --- Constructors ---
 
     public UserAccount() {}
 
@@ -53,7 +51,6 @@ public class UserAccount {
         this.createdAt = LocalDateTime.now();
     }
 
-    // --- Getters and Setters ---
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -79,7 +76,6 @@ public class UserAccount {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    // Relationships (Internal access for Service/Logic)
     public List<LoginEvent> getLoginEvents() { return loginEvents; }
     public void setLoginEvents(List<LoginEvent> loginEvents) { this.loginEvents = loginEvents; }
 
@@ -89,9 +85,6 @@ public class UserAccount {
     public List<ViolationRecord> getViolations() { return violations; }
     public void setViolations(List<ViolationRecord> violations) { this.violations = violations; }
 
-    /**
-     * Optional: Automatically set timestamp before saving to DB
-     */
     @PrePersist
     protected void onCreate() {
         if (this.createdAt == null) {

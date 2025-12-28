@@ -11,7 +11,6 @@ public class ViolationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   // In ViolationRecord.java
 
 @Column(name = "userId") 
 private Long userId;

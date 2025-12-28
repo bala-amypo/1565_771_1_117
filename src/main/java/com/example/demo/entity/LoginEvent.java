@@ -22,7 +22,6 @@ public class LoginEvent {
 
     public LoginEvent() {}
 
-    // Updated constructor to accept Long userId
     public LoginEvent(Long userId, String ipAddress, String deviceId, String location, String loginStatus) {
         this.userId = userId;
         this.ipAddress = ipAddress;
@@ -32,7 +31,6 @@ public class LoginEvent {
         this.timestamp = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
