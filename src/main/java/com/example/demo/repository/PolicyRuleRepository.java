@@ -25,3 +25,4 @@ import java.util.Optional;
 public interface PolicyRuleRepository extends JpaRepository<PolicyRule, Long> {
 
     List<PolicyRule> findByActiveTrue();
+}
