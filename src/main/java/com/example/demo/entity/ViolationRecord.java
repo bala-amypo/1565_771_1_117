@@ -15,7 +15,7 @@ public class ViolationRecord {
     // ✔ Proper relationship with UserAccount
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) 
-    private UserAccount user;
+    private UserAccount userId;
 
     @Column(name = "event_id")
     private Long eventId;
@@ -34,9 +34,9 @@ public class ViolationRecord {
     public ViolationRecord() {}
 
     // Updated Parameterized Constructor
-    public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
+    public ViolationRecord(UserAccount userId, Long eventId, PolicyRule policyRule,
                            String violationType, String details, String severity) {
-        this.user = user;
+        this.userId = userId;
         this.eventId = eventId;
         this.policyRule = policyRule;
         this.violationType = violationType;
@@ -51,8 +51,8 @@ public class ViolationRecord {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public UserAccount getUser() { return user; }
-    public void setUser(UserAccount user) { this.user = user; }
+    public UserAccount getUserId() { return userId; }
+    public void setUserId(UserAccount userId) { this.userId = userId; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
