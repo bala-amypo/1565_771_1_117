@@ -36,7 +36,8 @@ public class RuleEvaluationUtil {
             if (matches(rule, event)) {
 
                 ViolationRecord violation = new ViolationRecord();
-                violation.setUserId(event.getUser().getId());
+                // Use the new getUserId() method directly
+violation.setUserId(event.getUserId());
                 violation.setEventId(event.getId());
                 violation.setSeverity(rule.getSeverity());
                 violation.setViolationType(rule.getRuleCode());
