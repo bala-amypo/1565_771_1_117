@@ -11,10 +11,24 @@ public class ViolationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * USER RELATION (Entity Reference)
+     * This keeps the OneToMany mapping intact
+     */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserAccount user;   // <-- Entity reference, not Long
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private UserAccount user;
 
+    /**
+     * SHADOW FIELD FOR FK ID
+     * Allows existing code: violation.setUserId(event.getUserId());
+     */
+    @Column(name = "user_id")
+    private Long userId;
+
+    /**
+     * Event FK
+     */
     @Column(name = "event_id")
     private Long eventId;
 
@@ -28,12 +42,14 @@ public class ViolationRecord {
     @JoinColumn(name = "policy_rule_id")
     private PolicyRule policyRule;
 
+    // -------------------- CONSTRUCTORS --------------------
+
     public ViolationRecord() {}
 
-    // Updated constructor - accepts UserAccount not Long
     public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
                            String violationType, String details, String severity) {
-        this.user = user;
+        this.user = user;                // entity reference
+        this.userId = user.getId();      // sync FK shadow field
         this.eventId = eventId;
         this.policyRule = policyRule;
         this.violationType = violationType;
@@ -48,8 +64,16 @@ public class ViolationRecord {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
+    // Entity side
     public UserAccount getUser() { return user; }
-    public void setUser(UserAccount user) { this.user = user; }
+    public void setUser(UserAccount user) {
+        this.user = user;
+        this.userId = (user != null ? user.getId() : null); // keep both in sync
+    }
+
+    // FK shadow field side (used by existing code)
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
