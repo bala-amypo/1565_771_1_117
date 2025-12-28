@@ -11,9 +11,13 @@ public class ViolationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;   // Kept as Long per your requirement
-    private Long eventId;  // Kept as Long per your requirement
+   // In ViolationRecord.java
 
+@Column(name = "userId") // Explicitly naming it to avoid logical name confusion
+private Long userId;
+
+@Column(name = "eventId")
+private Long eventId;
     private String violationType;
     private String details;
     private String severity;
