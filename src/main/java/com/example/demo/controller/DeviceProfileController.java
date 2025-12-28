@@ -1,16 +1,61 @@
+// package com.example.demo.controller;
+
+// import com.example.demo.entity.DeviceProfile;
+// import com.example.demo.service.DeviceProfileService;
+// import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.*;
+
+// import java.util.List;
+
+// @RestController
+// @RequestMapping("/api/devices")
+// @SecurityRequirement(name = "BearerAuth")
+// public class DeviceProfileController {
+
+//     private final DeviceProfileService service;
+
+//     public DeviceProfileController(DeviceProfileService service) {
+//         this.service = service;
+//     }
+
+//     @PostMapping
+//     public ResponseEntity<DeviceProfile> register(@RequestBody DeviceProfile device) {
+//         return ResponseEntity.ok(service.registerDevice(device));
+//     }
+
+//    @PutMapping("/{id}/trust")
+// public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
+//     // Calling service with 'true' to actually trust the device
+//     return ResponseEntity.ok(service.updateTrustStatus(id, true)); 
+// }
+
+//     @GetMapping("/user/{userId}")
+//     public ResponseEntity<List<DeviceProfile>> getByUser(@PathVariable Long userId) {
+//         return ResponseEntity.ok(service.getDevicesByUser(userId));
+//     }
+
+//     @GetMapping("/lookup/{deviceId}")
+//     public ResponseEntity<DeviceProfile> getByDevice(@PathVariable String deviceId) {
+//         return ResponseEntity.ok(service.getByDeviceId(deviceId));
+//     }
+    
+// }
 package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/devices")
-@SecurityRequirement(name = "BearerAuth")
 public class DeviceProfileController {
 
     private final DeviceProfileService service;
@@ -20,24 +65,25 @@ public class DeviceProfileController {
     }
 
     @PostMapping
-    public ResponseEntity<DeviceProfile> register(@RequestBody DeviceProfile device) {
-        return ResponseEntity.ok(service.registerDevice(device));
+    public ResponseEntity<DeviceProfile> register(@RequestBody DeviceProfile d) {
+        return ResponseEntity.ok(service.registerDevice(d));
     }
 
-   @PutMapping("/{id}/trust")
-public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
-    // Calling service with 'true' to actually trust the device
-    return ResponseEntity.ok(service.updateTrustStatus(id, true)); 
-}
+    @PutMapping("/{id}/trust")
+    public ResponseEntity<DeviceProfile> trust(
+            @PathVariable Long id,
+            @RequestParam boolean trusted) {
+        return ResponseEntity.ok(service.updateTrustStatus(id, trusted));
+    }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<DeviceProfile>> getByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<DeviceProfile>> byUser(@PathVariable Long userId) {
         return ResponseEntity.ok(service.getDevicesByUser(userId));
     }
 
     @GetMapping("/lookup/{deviceId}")
-    public ResponseEntity<DeviceProfile> getByDevice(@PathVariable String deviceId) {
-        return ResponseEntity.ok(service.getByDeviceId(deviceId));
+    public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
+        Optional<DeviceProfile> d = service.findByDeviceId(deviceId);
+        return ResponseEntity.ok(d.orElse(null));
     }
-    
 }
