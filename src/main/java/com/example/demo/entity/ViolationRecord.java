@@ -15,16 +15,16 @@ public class ViolationRecord {
      * USER RELATION (Entity Reference)
      * This keeps the OneToMany mapping intact
      */
-    // RELATION FIELD (reads user object, but does NOT write FK)
-   @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private UserAccount user;
 
+    // RELATION FIELD (reads entity)
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+private UserAccount user;
 
-    // SHADOW FIELD (owns the FK column and supports setUserId())
-    @Column(name = "user_id", nullable= false)
-    private Long userId;
-
+// SHADOW FIELD (writes ID)
+@AttributeOverride(name = "userId", column = @Column(name = "user_id"))
+@Column(name = "user_id")
+private Long userId;
 
     /**
      * Event FK
