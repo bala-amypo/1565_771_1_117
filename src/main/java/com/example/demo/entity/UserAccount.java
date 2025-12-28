@@ -27,10 +27,11 @@ public class UserAccount {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeviceProfile> deviceProfiles = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-@JoinColumn(name = "user_id") // This tells Hibernate to look for the user_id column
+   // In UserAccount.java
+
+@OneToMany
+@JoinColumn(name = "userId", referencedColumnName = "id", insertable = false, updatable = false)
 private List<ViolationRecord> violations = new ArrayList<>();
-    // Default Constructor
     public UserAccount() {}
 
     // Parameterized Constructor
