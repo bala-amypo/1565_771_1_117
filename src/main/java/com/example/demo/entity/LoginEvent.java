@@ -2,7 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "login_event")
 public class LoginEvent {
@@ -13,7 +13,6 @@ public class LoginEvent {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private UserAccount user;
 
     private String ipAddress;
