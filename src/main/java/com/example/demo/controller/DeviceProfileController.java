@@ -35,8 +35,8 @@ public ResponseEntity<DeviceProfile> trust(@PathVariable Long id) {
         return ResponseEntity.ok(service.getDevicesByUser(userId));
     }
 
-    @GetMapping("/lookup/{deviceId}")
-    public ResponseEntity<DeviceProfile> getByDevice(@PathVariable String deviceId) {
-        return ResponseEntity.ok(service.getByDeviceId(deviceId));
-    }
+    @GetMapping("/{id}") // Change path to /api/devices/3
+public ResponseEntity<DeviceProfile> getById(@PathVariable Long id) {
+    return ResponseEntity.ok(service.getById(id));
+}
 }
