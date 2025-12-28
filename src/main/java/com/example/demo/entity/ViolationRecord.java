@@ -11,77 +11,48 @@ public class ViolationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * USER RELATION (Entity Reference)
-     * This keeps the OneToMany mapping intact
-     */
+   // In ViolationRecord.java
 
-// REAL RELATION OWNER (Hibernate relationship)
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "user_id", referencedColumnName = "id") // the real FK
-private UserAccount user;
+@Column(name = "userId") // Explicitly naming it to avoid logical name confusion
+private Long userId;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", nullable = false) // this creates the FK properly
+//     private UserAccount user; // <-- RELATION FIELD
 
-// SHADOW FIELD TO SUPPORT setUserId() WITHOUT MAPPING CONFLICT
-// 👉 Notice: different field name, SAME COLUMN in DB
-@Column(name = "user_id")
-private Long violationUserId; // changed name so no duplicate mapping
-
-
-    /**
-     * Event FK
-     */
-    @Column(name = "event_id")
-    private Long eventId;
-
+@Column(name = "eventId")
+private Long eventId;
     private String violationType;
     private String details;
     private String severity;
-    private Boolean resolved = false;
-    private LocalDateTime detectedAt = LocalDateTime.now();
+    private Boolean resolved;
+    private LocalDateTime detectedAt;
 
     @ManyToOne
     @JoinColumn(name = "policy_rule_id")
     private PolicyRule policyRule;
 
-    // -------------------- CONSTRUCTORS --------------------
-
+    // Default Constructor
     public ViolationRecord() {}
 
-public ViolationRecord(UserAccount user, Long eventId, PolicyRule policyRule,
-                       String violationType, String details, String severity) {
-    this.user = user;                                 // entity reference
-    this.violationUserId = (user != null ? user.getId() : null); // sync FK field
-    this.eventId = eventId;
-    this.policyRule = policyRule;
-    this.violationType = violationType;
-    this.details = details;
-    this.severity = severity;
-    this.resolved = false;
-    this.detectedAt = LocalDateTime.now();
-}
-
+    // Parameterized Constructor
+    public ViolationRecord(Long userId, Long eventId, PolicyRule policyRule, String violationType, String details, String severity) {
+        this.userId = userId;
+        this.eventId = eventId;
+        this.policyRule = policyRule;
+        this.violationType = violationType;
+        this.details = details;
+        this.severity = severity;
+        this.resolved = false;
+        this.detectedAt = LocalDateTime.now();
+    }
 
     // -------------------- GETTERS & SETTERS --------------------
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    // Entity side
-    public UserAccount getUser() { return user; }
-    public void setUser(UserAccount user) {
-        this.user = user;
-        this.violationUserId = (user != null ? user.getId() : null); // keep both in sync
-    }
-
-
-public Long getUserId() {
-    return violationUserId;
-}
-
-public void setUserId(Long userId) {
-    this.violationUserId = userId;
-}
-
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
@@ -104,3 +75,4 @@ public void setUserId(Long userId) {
     public PolicyRule getPolicyRule() { return policyRule; }
     public void setPolicyRule(PolicyRule policyRule) { this.policyRule = policyRule; }
 }
+
