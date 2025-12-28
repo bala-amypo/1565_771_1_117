@@ -41,10 +41,10 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
         return repo.findAll();
     }
 
-    @Override
-    public PolicyRule getRuleByCode(String ruleCode) {
-        return repo.findByRuleCode(ruleCode).orElse(null);
-    }
+    Optional<PolicyRule> ruleOpt = repo.findByRuleCode(code);
+PolicyRule rule = ruleOpt.orElseThrow(() ->
+        new RuntimeException("Rule not found"));
+
 }
 // package com.example.demo.service.impl;
 
