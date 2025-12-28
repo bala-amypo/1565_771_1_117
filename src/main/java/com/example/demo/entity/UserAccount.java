@@ -27,9 +27,9 @@ public class UserAccount {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeviceProfile> deviceProfiles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ViolationRecord> violations = new ArrayList<>();
-
+    @OneToMany(cascade = CascadeType.ALL)
+@JoinColumn(name = "user_id") // This tells Hibernate to look for the user_id column
+private List<ViolationRecord> violations = new ArrayList<>();
     // Default Constructor
     public UserAccount() {}
 
