@@ -47,7 +47,7 @@
 //     public void setIsTrusted(Boolean trusted) { isTrusted = trusted; }
 //     public LocalDateTime getLastSeen() { return lastSeen; }
 //     public void setLastSeen(LocalDateTime lastSeen) { this.lastSeen = lastSeen; }
-// }
+//}
 package com.example.demo.repository;
 
 import com.example.demo.entity.DeviceProfile;
