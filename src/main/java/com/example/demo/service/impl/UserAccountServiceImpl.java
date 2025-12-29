@@ -28,7 +28,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount getUserById(Long id) {
-        // findById already returns Optional by default in JpaRepository
         return userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -49,7 +48,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount findByUsername(String username) {
-        // This will now work because userRepo.findByUsername returns Optional
+    
         return userRepo.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
     }
