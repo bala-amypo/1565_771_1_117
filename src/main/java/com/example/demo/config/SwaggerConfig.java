@@ -20,14 +20,12 @@ public class SwaggerConfig {
                         .version("1.0")
                         .description("Security & Policy Enforcement System"))
 
-                // ✅ CORRECT SERVER (FROM YOUR DEPLOYMENT)
                 .addServersItem(
                         new Server()
                                 .url("https://9089.pro604cr.amypo.ai")
                                 .description("Production Server")
                 )
 
-                // 🔐 JWT SECURITY CONFIG
                 .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
                 .components(
                         new io.swagger.v3.oas.models.Components()
