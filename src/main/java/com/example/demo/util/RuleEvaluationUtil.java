@@ -25,9 +25,7 @@ public class RuleEvaluationUtil {
         this.violationRepo = violationRepo;
     }
 
-    /**
-     * Evaluate a login event against all active rules
-     */
+    
     public void evaluateLoginEvent(LoginEvent event) {
 
         List<PolicyRule> rules = ruleRepo.findByActiveTrue();
@@ -36,8 +34,7 @@ public class RuleEvaluationUtil {
             if (matches(rule, event)) {
 
                 ViolationRecord violation = new ViolationRecord();
-                // Use the new getUserId() method directly
-violation.setUserId(event.getUserId());
+                violation.setUserId(event.getUserId());
                 violation.setEventId(event.getId());
                 violation.setSeverity(rule.getSeverity());
                 violation.setViolationType(rule.getRuleCode());
@@ -50,15 +47,12 @@ violation.setUserId(event.getUserId());
         }
     }
 
-    /**
-     * Simple rule matcher (can be extended later)
-     */
-    private boolean matches(PolicyRule rule, LoginEvent event) {
+    
+        private boolean matches(PolicyRule rule, LoginEvent event) {
         String condition = rule.getConditionsJson();
 
         if (condition == null) return false;
 
-        // Simple matching examples
         if (condition.contains("FAILED") &&
                 "FAILED".equalsIgnoreCase(event.getLoginStatus())) {
             return true;

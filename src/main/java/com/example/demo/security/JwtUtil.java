@@ -174,7 +174,6 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // ✅ Generate JWT
     public String generateToken(String email, Long userId, String role, String username) {
 
         Map<String, Object> claims = new HashMap<>();
@@ -191,7 +190,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ✅ Validate JWT
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()

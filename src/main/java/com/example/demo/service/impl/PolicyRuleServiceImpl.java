@@ -36,7 +36,6 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
 
     @Override
     public PolicyRule getRuleByCode(String code) {
-        // This requires findByRuleCode to return Optional<PolicyRule> in the Repository
         return ruleRepo.findByRuleCode(code)
                 .orElseThrow(() -> new RuntimeException("Rule not found"));
     }
